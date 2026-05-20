@@ -19,6 +19,8 @@ A comprehensive Traffic Management System built with Java EE technologies for ma
 - [Project Structure](#project-structure)
 - [Development](#development)
 - [Contributing](#contributing)
+- [Security](#security)
+- [Documentation](#documentation)
 - [License](#license)
 
 ## 🎯 Overview
@@ -374,8 +376,12 @@ TmsApp/
 │       ├── Connection1-jdbc.xml
 │       └── jps-config.xml
 │
+├── docs/                        # Documentation folder
+│   └── CODE_ANALYSIS.md         # Detailed code analysis and improvements
+│
 ├── README.md                    # This file
-├── IMPROVEMENTS.md              # Code analysis and recommendations
+├── CONTRIBUTING.md              # Contribution guidelines
+├── SECURITY.md                  # Security policy and best practices
 └── .gitignore                   # Git ignore rules
 ```
 
@@ -429,12 +435,12 @@ Currently, the project lacks automated tests. Consider adding:
 
 ## 🐛 Known Issues
 
-1. **Passwords stored in plain text** - See IMPROVEMENTS.md for security enhancement
+1. **Passwords stored in plain text** - See [SECURITY.md](SECURITY.md) for security enhancement
 2. **System.out.println** used for logging - Should migrate to proper logging framework
 3. **Missing unit tests** - Test coverage needed
-4. **TODO comments** - Some features not fully implemented
+4. **TODO comments** - Some features not fully implemented ✅ (Mostly resolved)
 
-See [IMPROVEMENTS.md](IMPROVEMENTS.md) for detailed analysis and recommendations.
+See [docs/CODE_ANALYSIS.md](docs/CODE_ANALYSIS.md) for detailed analysis and recommendations.
 
 ## 📝 API Documentation
 
@@ -498,6 +504,59 @@ Contributions are welcome! Please follow these guidelines:
 - Ensure code follows existing patterns
 - Add tests for new features
 - Update documentation
+
+For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## 🔒 Security
+
+Security is a top priority for this project. We follow industry best practices and continuously work to improve the security posture of the application.
+
+### Security Features
+- ✅ Role-based access control (RBAC)
+- ✅ JNDI data source configuration
+- ✅ Parameterized queries (JPA Named Queries)
+- ⚠️ Password hashing - Planned (currently plain text - **DO NOT use in production**)
+- ⚠️ Session management - Needs enhancement
+- ⚠️ CSRF protection - Planned
+
+### Reporting Security Vulnerabilities
+
+**Please do not report security vulnerabilities through public GitHub issues.**
+
+Instead, please refer to our [Security Policy](SECURITY.md) for instructions on how to report security issues responsibly.
+
+### Security Best Practices
+
+Before deploying to production, review and implement all recommendations in [SECURITY.md](SECURITY.md), including:
+- Password hashing (BCrypt/PBKDF2)
+- Session timeout and security
+- Input validation and sanitization
+- HTTPS/SSL configuration
+- Security headers
+
+## 📚 Documentation
+
+Comprehensive documentation is available to help you understand, use, and contribute to this project:
+
+### For Users
+- **[README.md](README.md)** - Overview, installation, and usage guide
+- **[Installation Guide](#installation)** - Step-by-step setup instructions
+- **[User Roles](#user-roles)** - Understanding different user permissions
+
+### For Developers
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute to the project
+- **[docs/CODE_ANALYSIS.md](docs/CODE_ANALYSIS.md)** - Detailed code quality analysis and improvement recommendations
+- **[Architecture](#architecture)** - System architecture overview
+- **[API Documentation](#api-documentation)** - Session bean interfaces
+
+### For Security
+- **[SECURITY.md](SECURITY.md)** - Security policy, best practices, and vulnerability reporting
+- **[Security Checklist](SECURITY.md#security-checklist-for-production)** - Pre-deployment security review
+
+### Additional Resources
+- Database schema definitions in `Model/database/Connection1/TMS/`
+- Configuration files in `src/META-INF/` and `ViewController/public_html/WEB-INF/`
+- Entity relationship documentation in code comments
 
 ## 📄 License
 
