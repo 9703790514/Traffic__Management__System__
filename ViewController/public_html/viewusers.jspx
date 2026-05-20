@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <jsp:output omit-xml-declaration="true"
+              doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <f:view>
+    <html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
+        <title>View Users</title>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+          }
+          .table-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            overflow-x: auto;
+          }
+          h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 24px;
+            font-weight: 700;
+          }
+          table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 1rem;
+          }
+          thead th {
+            background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid #e0e7ff;
+          }
+          tbody tr:nth-child(even) {
+            background: #f9fafb;
+          }
+          tbody tr:hover {
+            background: #e0e7ff;
+          }
+          tbody td {
+            padding: 12px 12px;
+            color: #444;
+            border-bottom: 1px solid #ddd;
+          }
+          @media (max-width: 600px) {
+            body {
+              padding: 20px 10px;
+            }
+            .table-container {
+              max-width: 100%;
+            }
+            thead {
+              display: none;
+            }
+            tbody tr {
+              display: block;
+              margin-bottom: 18px;
+              border-radius: 8px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+              background: white;
+              padding: 12px;
+            }
+            tbody td {
+              display: flex;
+              justify-content: space-between;
+              padding: 8px 12px;
+              border-bottom: none;
+              font-size: 0.95rem;
+            }
+            tbody td::before {
+              content: attr(data-label);
+              font-weight: 600;
+              color: #6366f1;
+              flex-basis: 45%;
+              text-align: left;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="table-container">
+          <h1>
+             
+          </h1><h1>
+            View Users
+          </h1>
+           <h:form>
+            <h:dataTable value="#{userBean.users}" var="user" styleClass="user-table" rowClasses="even,odd">
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="Password"/>
+                </f:facet>
+                <h:outputText value="#{user.password}" />
+              </h:column>
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="Username"/>
+                </f:facet>
+                <h:outputText value="#{user.username}" />
+              </h:column>
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="Role"/>
+                </f:facet>
+                <h:outputText value="#{user.roles.rolename}" />
+              </h:column>
+            </h:dataTable>
+          </h:form>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

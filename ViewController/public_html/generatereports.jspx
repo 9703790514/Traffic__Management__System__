@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.1">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Report by Offence Type</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet"/>
+        <style type="text/css">
+          body {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+            margin: 0;
+            min-height: 100vh;
+          }
+          .main-panel {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+          .content-panel {
+            background: linear-gradient(120deg, #ffffff 75%, #e0eafc 100%);
+            border-radius: 18px;
+            border: 2px solid #b6e0fe;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            padding: 48px 54px 40px 54px;
+            margin-top: 36px;
+            min-width: 380px;
+            max-width: 98vw;
+          }
+          .header-label {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #0077b6;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px #b6e0fe44;
+          }
+          .form-label {
+            font-size: 1.18em;
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 10px;
+            letter-spacing: .08em;
+            display: block;
+            text-align: center;
+          }
+          .input-text {
+            width: 340px;
+            max-width: 90vw;
+            font-size: 1.13em;
+            padding: 12px 14px;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            background: #e3f2fd;
+            margin-bottom: 28px;
+            margin-top: 8px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: border 0.2s;
+          }
+          .input-text:focus {
+            border: 2px solid #0077b6;
+            background: #fff;
+          }
+          .button-panel {
+            display: flex;
+            justify-content: center;
+            gap: 34px;
+            margin-top: 10px;
+            margin-bottom: 8px;
+          }
+          .submit-btn, .open-btn {
+            background: linear-gradient(90deg, #0077b6 60%, #48cae4 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 36px;
+            font-weight: 700;
+            font-size: 1.13em;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #b6e0fe33;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.5px;
+          }
+          .submit-btn:hover, .open-btn:hover {
+            background: linear-gradient(90deg, #48cae4 60%, #0077b6 100%);
+            transform: translateY(-2px) scale(1.04);
+          }
+          .status-bar {
+            font-size: 1.08em;
+            color: #1976d2;
+            background: #fafdff;
+            border-radius: 6px;
+            padding: 10px 20px;
+            margin-top: 24px;
+            text-align: center;
+            min-height: 32px;
+            font-weight: 600;
+            box-shadow: 0 1px 6px #b6e0fe22;
+          }
+          @media (max-width: 600px) {
+            .content-panel { padding: 22px 4vw 18px 4vw; min-width: 0; }
+            .input-text { width: 96vw; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="main-panel">
+          <div class="content-panel">
+            <h:form>
+              <div class="header-label">REPORT BY OFFENCE TYPE</div>
+              <div class="form-label">Enter Offence Type:</div>
+              <h:inputText id="offenceType" value="#{reportByOffenceTypeBean.offenceType}" styleClass="input-text" required="true" />
+              <h:message for="offenceType" style="color:#e11d48; font-weight:600; display:block; text-align:center; margin-bottom:10px;" />
+
+              <div class="button-panel">
+                <h:commandButton value="Generate Report"
+                  action="#{reportByOffenceTypeBean.generateReport}"
+                  styleClass="submit-btn" />
+                <h:commandButton value="Open Report"
+                  action="#{reportByOffenceTypeBean.openReport}"
+                  styleClass="open-btn"
+                  disabled="#{!reportByOffenceTypeBean.reportGenerated}" />
+              </div>
+              <div class="status-bar">
+                <h:outputText value="#{reportByOffenceTypeBean.statusMessage}" />
+              </div>
+            </h:form>
+          </div>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

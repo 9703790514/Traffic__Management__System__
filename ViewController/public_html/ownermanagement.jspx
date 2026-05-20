@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.1">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <jsp:output omit-xml-declaration="true"
+              doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Owner Management</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        <style type="text/css">
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #3a3a7c;
+          }
+          .navbar {
+            background: transparent;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            padding: 12px 0;
+            box-shadow: none;
+            text-align: center;
+          }
+          .navbar > div {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+          }
+          .nav-btn {
+            background: #fbb034;
+            border: none;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease;
+            margin: 0 2px;
+            white-space: nowrap;
+          }
+          .nav-btn.active, .nav-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+          }
+          .container {
+            max-width: 720px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 48px 40px;
+            box-sizing: border-box;
+            margin-top: 32px;
+            }
+          .center-messages {
+            max-width: 600px;
+            margin: 0 auto 32px auto;
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #3a3a7c;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+          }
+          /* Styles for different message severities in the modal */
+          .modal-message.info { border-color: #5bc0de; background-color: #d9edf7; color: #31708f; }
+          .modal-message.warn { border-color: #f0ad4e; background-color: #fcf8e3; color: #8a6d3b; }
+          .modal-message.error { border-color: #d9534f; background-color: #f2dede; color: #a94442; }
+          .modal-message.fatal { border-color: #770000; background-color: #ffe0e0; color: #550000; }
+
+          h1, h2 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+          }
+          .form-field {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+          }
+          .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #3a3a7c;
+          }
+          .input-text {
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #f9f9fc;
+            transition: border-color 0.3s ease;
+            color: #3a3a7c;
+          }
+          .input-text:focus {
+            border-color: #fbb034;
+            outline: none;
+            background: #fffbe7;
+            box-shadow: 0 2px 8px #fbb03488;
+          }
+          .submit-btn, .action-btn {
+            background: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            margin-right: 12px;
+          }
+          .submit-btn:hover, .action-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+          }
+          .action-btn {
+            background: #ccc;
+            color: #555;
+            margin-right: 0;
+          }
+          .action-btn:hover {
+            background: #999;
+            color: #fff;
+          }
+          .datatable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background: #f9f9fc;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(58,58,124,0.1);
+          }
+          .datatable th, .datatable td {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 16px;
+            text-align: left;
+            color: #3a3a7c;
+          }
+          .datatable th {
+            background: #fbb03422;
+            font-weight: 700;
+            font-size: 1em;
+          }
+          .datatable tr:nth-child(even) {
+            background: #fffbe7;
+          }
+          .datatable tr:hover {
+            background: #fbb03444;
+          }
+          .datatable tr:last-child td {
+            border-bottom: none;
+          }
+          .default-message {
+            margin-top: 40px;
+            background: #fffbe7;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            color: #3a3a7c;
+          }
+          .confirm-panel {
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px auto 0 auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            color: #3a3a7c;
+          }
+          .confirm-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 16px;
+          }
+          @media (max-width: 768px) {
+            .container {
+              padding: 32px 24px;
+              max-width: 95vw;
+            }
+            .nav-btn {
+              padding: 8px 14px;
+              font-size: 0.95em;
+            }
+          }
+          /* Modal Styles */
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+          }
+          .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+          }
+          .modal-header {
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #3a3a7c;
+          }
+          .modal-body {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+          }
+          .modal-footer .modal-btn {
+            background-color: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+          }
+          .modal-footer .modal-btn:hover {
+            background-color: #3a3a7c;
+            color: #fbb034;
+          }
+        </style>
+      </head>
+      <body>
+        <h:form>
+          <div class="navbar">
+            <div>
+              <h:commandButton value="Dashboard" action="#{navigationBean.dashboard}" styleClass="#{ownerBean.pageMode eq 'dashboard' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{ownerBean.pageMode}" value="dashboard"/>
+              </h:commandButton>
+              <h:commandButton value="Add Owner" action="#{ownerBean.navigateToMode}" styleClass="#{ownerBean.pageMode eq 'add' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{ownerBean.pageMode}" value="add"/>
+              </h:commandButton>
+              <h:commandButton value="Update Owner" action="#{ownerBean.navigateToMode}" styleClass="#{ownerBean.pageMode eq 'update' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{ownerBean.pageMode}" value="update"/>
+              </h:commandButton>
+              <h:commandButton value="Delete Owner" action="#{ownerBean.navigateToMode}" styleClass="#{ownerBean.pageMode eq 'delete' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{ownerBean.pageMode}" value="delete"/>
+              </h:commandButton>
+              <h:commandButton value="View Owners" action="#{ownerBean.navigateToMode}" styleClass="#{ownerBean.pageMode eq 'view' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{ownerBean.pageMode}" value="view"/>
+              </h:commandButton>
+              </div>
+          </div>
+        </h:form>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'none'}">
+          <div class="default-message">
+            <h2>Welcome to Owner Management</h2>
+            <p>Please select an option from the navigation bar to manage owners.</p>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'dashboard'}">
+          <div class="container">
+            <h2>Dashboard</h2>
+            <p>Welcome to the Owner Management Dashboard. Here you can see summary statistics and quick links.</p>
+            <p>Total Owners: <h:outputText value="#{ownerBean.ownerCount}"/></p>
+            </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'add'}">
+          <div class="container">
+            <h2>Add Owner</h2>
+            <h:form>
+              <div class="form-field">
+                <label for="addProofName" class="form-label">Address Proof Name</label>
+                <h:inputText id="addProofName" value="#{ownerBean.addProofName}" styleClass="input-text" required="true" />
+                <h:message for="addProofName" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="dateofbirth" class="form-label">Date of Birth</label>
+                <h:inputText id="dateofbirth" value="#{ownerBean.dateofbirth}" styleClass="input-text" required="true" />
+                <h:message for="dateofbirth" style="color:#e11d48; font-weight:600;"/>
+                <small>Format: YYYY-MM-dd HH:mm:ss</small>
+              </div>
+              <div class="form-field">
+                <label for="fname" class="form-label">First Name</label>
+                <h:inputText id="fname" value="#{ownerBean.fname}" styleClass="input-text" required="true" />
+                <h:message for="fname" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="lname" class="form-label">Last Name</label>
+                <h:inputText id="lname" value="#{ownerBean.lname}" styleClass="input-text" required="true" />
+                <h:message for="lname" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="gender" class="form-label">Gender</label>
+                <h:inputText id="gender" value="#{ownerBean.gender}" styleClass="input-text" required="true" />
+                <h:message for="gender" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="mobileNo" class="form-label">Mobile Number</label>
+                <h:inputText id="mobileNo" value="#{ownerBean.mobileNo}" styleClass="input-text" />
+                <h:message for="mobileNo" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="landlineNo" class="form-label">Landline Number</label>
+                <h:inputText id="landlineNo" value="#{ownerBean.landlineNo}" styleClass="input-text" />
+                <h:message for="landlineNo" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="occupation" class="form-label">Occupation</label>
+                <h:inputText id="occupation" value="#{ownerBean.occupation}" styleClass="input-text" />
+                <h:message for="occupation" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="pancardNo" class="form-label">PAN Card Number</label>
+                <h:inputText id="pancardNo" value="#{ownerBean.pancardNo}" styleClass="input-text" required="true" />
+                <h:message for="pancardNo" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="permAddr" class="form-label">Permanent Address</label>
+                <h:inputText id="permAddr" value="#{ownerBean.permAddr}" styleClass="input-text" required="true" />
+                <h:message for="permAddr" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="tempAddr" class="form-label">Temporary Address</label>
+                <h:inputText id="tempAddr" value="#{ownerBean.tempAddr}" styleClass="input-text" />
+                <h:message for="tempAddr" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="pincode" class="form-label">Pincode</label>
+                <h:inputText id="pincode" value="#{ownerBean.pincode}" styleClass="input-text" required="true" />
+                <h:message for="pincode" style="color:#e11d48; font-weight:600;"/>
+              </div>
+              <h:commandButton value="Submit" action="#{ownerBean.addOwner}" styleClass="submit-btn" />
+            </h:form>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'update'}">
+          <div class="container">
+            <h2>Update Owner</h2>
+            <h:form>
+              <h:panelGroup rendered="#{!ownerBean.editMode}">
+                <h:dataTable value="#{ownerBean.owners}" var="owner" styleClass="datatable">
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Owner ID"/></f:facet>
+                    <h:outputText value="#{owner.ownerId}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Name"/></f:facet>
+                    <h:outputText value="#{owner.fname} #{owner.lname}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Gender"/></f:facet>
+                    <h:outputText value="#{owner.gender}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Mobile"/></f:facet>
+                    <h:outputText value="#{owner.mobileNo}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Action"/></f:facet>
+                    <h:commandButton value="Edit" action="#{ownerBean.startEdit}" styleClass="action-btn">
+                      <f:setPropertyActionListener target="#{ownerBean.selectedOwner}" value="#{owner}" />
+                    </h:commandButton>
+                  </h:column>
+                </h:dataTable>
+              </h:panelGroup>
+              <h:panelGroup rendered="#{ownerBean.editMode}">
+                <div class="form-field">
+                  <label for="editOwnerId" class="form-label">Owner ID</label>
+                  <h:outputText id="editOwnerId" value="#{ownerBean.selectedOwner.ownerId}" styleClass="input-text" />
+                </div>
+                <div class="form-field">
+                  <label for="editAddProofName" class="form-label">Address Proof Name</label>
+                  <h:inputText id="editAddProofName" value="#{ownerBean.addProofName}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editDateofbirth" class="form-label">Date of Birth</label>
+                  <h:inputText id="editDateofbirth" value="#{ownerBean.dateofbirth}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editFname" class="form-label">First Name</label>
+                  <h:inputText id="editFname" value="#{ownerBean.fname}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editLname" class="form-label">Last Name</label>
+                  <h:inputText id="editLname" value="#{ownerBean.lname}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editGender" class="form-label">Gender</label>
+                  <h:inputText id="editGender" value="#{ownerBean.gender}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editMobileNo" class="form-label">Mobile Number</label>
+                  <h:inputText id="editMobileNo" value="#{ownerBean.mobileNo}" styleClass="input-text" />
+                </div>
+                <div class="form-field">
+                  <label for="editLandlineNo" class="form-label">Landline Number</label>
+                  <h:inputText id="editLandlineNo" value="#{ownerBean.landlineNo}" styleClass="input-text" />
+                </div>
+                <div class="form-field">
+                  <label for="editOccupation" class="form-label">Occupation</label>
+                  <h:inputText id="editOccupation" value="#{ownerBean.occupation}" styleClass="input-text" />
+                </div>
+                <div class="form-field">
+                  <label for="editPancardNo" class="form-label">PAN Card Number</label>
+                  <h:inputText id="editPancardNo" value="#{ownerBean.pancardNo}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editPermAddr" class="form-label">Permanent Address</label>
+                  <h:inputText id="editPermAddr" value="#{ownerBean.permAddr}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editTempAddr" class="form-label">Temporary Address</label>
+                  <h:inputText id="editTempAddr" value="#{ownerBean.tempAddr}" styleClass="input-text" />
+                </div>
+                <div class="form-field">
+                  <label for="editPincode" class="form-label">Pincode</label>
+                  <h:inputText id="editPincode" value="#{ownerBean.pincode}" styleClass="input-text" required="true" />
+                </div>
+                <h:commandButton value="Save" action="#{ownerBean.saveEdit}" styleClass="submit-btn" />
+                <h:commandButton value="Cancel" action="#{ownerBean.cancelEdit}" styleClass="action-btn" immediate="true" />
+              </h:panelGroup>
+            </h:form>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'delete'}">
+          <div class="container">
+            <h2>Delete Owner</h2>
+            <h:form>
+              <h:dataTable value="#{ownerBean.owners}" var="owner" styleClass="datatable">
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Owner ID" /></f:facet>
+                  <h:outputText value="#{owner.ownerId}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Name" /></f:facet>
+                  <h:outputText value="#{owner.fname} #{owner.lname}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Gender" /></f:facet>
+                  <h:outputText value="#{owner.gender}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Mobile" /></f:facet>
+                  <h:outputText value="#{owner.mobileNo}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Delete" /></f:facet>
+                  <h:commandButton value="Delete" styleClass="action-btn" action="#{ownerBean.askDelete}">
+                    <f:setPropertyActionListener target="#{ownerBean.selectedOwner}" value="#{owner}" />
+                  </h:commandButton>
+                </h:column>
+              </h:dataTable>
+            </h:form>
+            <h:form rendered="#{ownerBean.confirmDeleteMode}">
+              <div class="confirm-panel">
+                <div class="confirm-title">Are you sure you want to delete this owner?</div>
+                <h:panelGrid columns="2" style="margin: 0 auto;">
+                  <h:commandButton value="Yes, Delete" action="#{ownerBean.confirmDelete}" styleClass="action-btn" />
+                  <h:commandButton value="Cancel" action="#{ownerBean.cancelDelete}" styleClass="action-btn" />
+                </h:panelGrid>
+              </div>
+            </h:form>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{ownerBean.pageMode eq 'view'}">
+          <div class="container">
+            <h2>View Owners</h2>
+            <h:form>
+              <h:dataTable value="#{ownerBean.owners}" var="owner" styleClass="datatable">
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Owner ID" /></f:facet>
+                  <h:outputText value="#{owner.ownerId}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Name" /></f:facet>
+                  <h:outputText value="#{owner.fname} #{owner.lname}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Gender" /></f:facet>
+                  <h:outputText value="#{owner.gender}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Mobile" /></f:facet>
+                  <h:outputText value="#{owner.mobileNo}" />
+                </h:column>
+              </h:dataTable>
+            </h:form>
+          </div>
+        </h:panelGroup>
+
+        <h:messages globalOnly="true" styleClass="center-messages" infoStyle="background: #e7ffe7; border-color: #34fbb0; color: #3a3a7c;"
+                    warnStyle="background: #fffbe7; border-color: #fbb034; color: #3a3a7c;"
+                    errorStyle="background: #f2dede; border-color: #d9534f; color: #a94442;"
+                    fatalStyle="background: #ffe0e0; border-color: #770000; color: #550000;"/>
+
+        <h:panelGroup rendered="#{ownerBean.showMessageModal}">
+          <div class="modal-overlay">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h:outputText value="#{ownerBean.messageTitle}"/>
+              </div>
+              <div class="modal-body">
+                <h:outputText value="#{ownerBean.messageContent}"/>
+              </div>
+              <div class="modal-footer">
+                <h:form>
+                  <h:commandButton value="OK" action="#{ownerBean.hideMessageModal}" styleClass="modal-btn"/>
+                </h:form>
+              </div>
+            </div>
+          </div>
+        </h:panelGroup>
+
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

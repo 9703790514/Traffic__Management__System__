@@ -1,0 +1,257 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:ui="http://java.sun.com/jsf/facelets">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Pending Offenses Details</title>
+        <meta charset="UTF-8" />
+        <style>
+          /* Global body and container styling */
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            color: #3a3a7c;
+          }
+          .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 48px 40px;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+          }
+          h2 {
+            margin-top: 0;
+            margin-bottom: 32px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-align: center;
+          }
+          h3 {
+            color: #fbb034;
+            margin-top: 36px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+            border-bottom: 2px solid #fbb034;
+            padding-bottom: 6px;
+          }
+
+          /* Table styles for h:dataTable */
+          .offense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #f9f9fc;
+            border-radius: 8px;
+            overflow: hidden; /* For rounded corners on the table */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Subtle shadow for the table */
+          }
+          .offense-table th, .offense-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+          }
+          .offense-table th {
+            background-color: #fbb034;
+            color: #3a3a7c;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9em;
+          }
+          .offense-table tr:last-child td {
+            border-bottom: none; /* No border for the last row */
+          }
+          .offense-table tbody tr:nth-child(even) {
+            background-color: #f0f0f0;
+          }
+          .offense-table tbody tr:hover {
+            background-color: #ffe0a3;
+            transition: background-color 0.2s ease;
+          }
+
+          /* Styling for buttons */
+          .btn {
+            background: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            user-select: none;
+            margin: 0 10px; /* Add some margin between buttons */
+            text-decoration: none; /* Ensure no underline for h:commandButton */
+          }
+          .btn:hover, .btn:focus {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+            outline: none;
+          }
+
+          /* Modal Overlay Styles (visibility controlled by rendered attribute) */
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+          }
+
+          /* Modal Content Styles */
+          .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(0); /* No initial transform needed, JSF handles visibility */
+          }
+          .modal-content h3 {
+            color: #3a3a7c;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+          }
+          .modal-content p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+          }
+          .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+          }
+          .modal-buttons .btn { /* Reuse existing btn style for modal buttons */
+            padding: 10px 25px;
+            margin: 0; /* Override margin from general .btn */
+            font-size: 0.95em;
+          }
+          .modal-buttons .btn.cancel {
+            background: #e0e0e0;
+            color: #3a3a7c;
+          }
+          .modal-buttons .btn.cancel:hover {
+            background: #ccc;
+            color: #3a3a7c;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Pending Offenses for Vehicle: <h:outputText value="#{transferVehicleBean.vehicleNumber}" /></h2>
+
+          <!-- Using h:dataTable as requested -->
+          <h:dataTable value="#{transferVehicleBean.pendingOffenses}"
+                       var="offense"
+                       styleClass="offense-table"
+                       rendered="#{not empty transferVehicleBean.pendingOffenses}">
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Offense ID"/>
+              </f:facet>
+              <h:outputText value="#{offense.offenceDetailId}"/>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Type"/>
+              </f:facet>
+              <h:outputText value="#{offense.offenseDetails.offenceType}"/>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Date &amp; Time"/>
+              </f:facet>
+              <h:outputText value="#{offense.time}">
+                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Status"/>
+              </f:facet>
+              <h:outputText value="#{offense.offenceStatus}"/>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Place"/>
+              </f:facet>
+              <h:outputText value="#{offense.place}"/>
+            </h:column>
+
+            <!-- Optional: Message if no offenses found. This ideally shouldn't be seen if navigation is conditional. -->
+            <f:facet name="footer">
+              <h:panelGroup layout="block" rendered="#{empty transferVehicleBean.pendingOffenses}">
+                <div style="text-align: center; padding: 15px; background-color: #f0f0f0; border-radius: 8px; font-style: italic; color: #555;">
+                  No pending offenses found for this vehicle.
+                </div>
+              </h:panelGroup>
+            </f:facet>
+          </h:dataTable>
+
+          <h:form style="text-align: center; margin-top: 30px;">
+            <!-- "Clear All" button now calls the prepare method in the bean -->
+            <h:commandButton value="Clear All" action="#{transferVehicleBean.prepareClearAllOffenses}" styleClass="btn" />
+
+            <!-- Changed h:commandLink to h:commandButton to remove underline and apply styling -->
+            <h:commandButton value="Back to Transfer Vehicle" action="backToTransferVehicle" styleClass="btn" />
+
+            <!-- Display global messages, including confirmation/error messages -->
+            <h:messages id="globalMessages" styleClass="error-messages" globalOnly="true" layout="table" />
+          </h:form>
+        </div>
+
+        <!-- Confirmation Modal Structure - controlled by rendered attribute of h:panelGroup -->
+        <h:panelGroup id="clearAllConfirmationModalPanel" layout="block" styleClass="modal-overlay" rendered="#{transferVehicleBean.showClearConfirmation}">
+          <div class="modal-content">
+            <h3>Confirm Offense Resolution</h3>
+            <p>Are you sure you want to resolve all pending offenses?</p>
+            <p>Total Penalty: <h:outputText value="#{transferVehicleBean.totalPenalty}">
+                                 <f:convertNumber type="currency" currencySymbol="$" maxFractionDigits="2" minFractionDigits="2"/>
+                               </h:outputText>
+            </p>
+            <div class="modal-buttons">
+              <h:form>
+                <h:commandButton value="No (Cancel)" action="#{transferVehicleBean.cancelClearAll}" styleClass="btn cancel" />
+                <h:commandButton value="Yes (Confirm)" action="#{transferVehicleBean.confirmClearAllOffenses}" styleClass="btn" />
+              </h:form>
+              <!-- FIXED: Added missing closing tag for the h:form inside the modal buttons -->
+            </div>
+          </div>
+        </h:panelGroup>
+
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

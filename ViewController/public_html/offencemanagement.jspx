@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.1">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Offense Management</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <style type="text/css">
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            padding: 40px 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #3a3a7c;
+          }
+          .navbar {
+            background: transparent;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            padding: 12px 0;
+            text-align: center;
+          }
+          .navbar > div {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+          }
+          .nav-btn {
+            background: #fbb034;
+            border: none;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease;
+            margin: 0 4px;
+            white-space: nowrap;
+          }
+          .nav-btn.active, .nav-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+          }
+          .center-messages {
+            max-width: 900px;
+            margin: 16px auto 24px auto;
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+          }
+          .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 40px 36px;
+            box-sizing: border-box;
+            margin-top: 32px;
+            overflow-x: auto;
+          }
+          h2, h1 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-size: 2em;
+          }
+          .form-field {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+          }
+          .form-label {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #3a3a7c;
+            letter-spacing: 0.2px;
+            font-size: 1em;
+          }
+          .input-text, .input-password, .input-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #f9f9fc;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            color: #3a3a7c;
+          }
+          .input-text:focus, .input-password:focus, .input-select:focus {
+            border-color: #fbb034;
+            outline: none;
+            background: #fffbe7;
+            box-shadow: 0 2px 8px #fbb03488;
+          }
+          .submit-btn, .action-btn {
+            background: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            margin-right: 12px;
+          }
+          .submit-btn:hover, .action-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+          }
+          .action-btn {
+            background: #ccc;
+            color: #555;
+            margin-right: 0;
+          }
+          .action-btn:hover {
+            background: #999;
+            color: #fff;
+          }
+          .datatable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 24px;
+            background: #f9f9fc;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(58,58,124,0.1);
+            font-size: 1em;
+          }
+          .datatable th, .datatable td {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 14px 18px;
+            text-align: left;
+            color: #3a3a7c;
+          }
+          .datatable th {
+            background: #fbb03422;
+            font-weight: 700;
+            font-size: 1em;
+          }
+          .datatable tr:nth-child(even) {
+            background: #fffbe7;
+          }
+          .datatable tr:hover {
+            background: #fbb03444;
+          }
+          .datatable tr:last-child td {
+            border-bottom: none;
+          }
+          .default-message {
+            max-width: 900px;
+            margin: 16px auto;
+            background: #fffbe7;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+            text-align: center;
+            color: #3a3a7c;
+            font-size: 1.1em;
+            font-weight: 600;
+          }
+          .confirm-panel {
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 24px 32px;
+            margin: 32px auto 0 auto;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            color: #3a3a7c;
+          }
+          .confirm-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 20px;
+          }
+          @media (max-width: 900px) {
+            .container, .default-message { max-width: 95vw; padding: 24px 20px; }
+            .navbar > div { flex-wrap: wrap; gap: 8px; }
+          }
+          @media (max-width: 600px) {
+            .nav-btn { padding: 8px 14px; font-size: 0.95em; }
+            .submit-btn, .action-btn { padding: 10px 18px; font-size: 0.95em; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="center-messages">
+          <h:messages
+            style="color: #1976d2; background: #e3f0fc; border: 1.5px solid #90caf9; border-radius: 8px; padding: 4px 8px; font-weight: 600; font-size: 1em; box-shadow: 0 2px 8px #90caf940;" />
+        </div>
+        <div class="navbar">
+          <h:form>
+            <div class="nav-btn-row">
+              <h:commandButton value="Dashboard" action="#{navigationBean.dashboard}"
+                styleClass="#{offenceBean.pageMode eq 'dashboard' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{offenceBean.pageMode}" value="dashboard"/>
+              </h:commandButton>
+              <h:commandButton value="Add Offense" styleClass="#{offenceBean.pageMode eq 'add' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{offenceBean.pageMode}" value="add"/>
+              </h:commandButton>
+              <h:commandButton value="Clear Offense" styleClass="#{offenceBean.pageMode eq 'update' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{offenceBean.pageMode}" value="update"/>
+              </h:commandButton>
+            </div>
+          </h:form>
+        </div>
+
+        <h:panelGroup rendered="#{offenceBean.pageMode eq 'add'}">
+          <div class="container">
+            <h2><span class="material-icons" style="vertical-align:middle;color:#1976d2;">add_circle_outline</span> Add Offense</h2>
+            <h:form enctype="multipart/form-data"> <div class="form-field">
+                <label for="place" class="form-label">Place</label>
+                <h:inputText id="place" value="#{offenceBean.place}" styleClass="input-text" required="true" />
+                <h:message for="place" style="color:#e11d48; font-weight:600;" />
+              </div>
+              <div class="form-field">
+                <label for="time" class="form-label">Time (yyyy-MM-dd HH:mm:ss)</label>
+                <h:inputText id="time" value="#{offenceBean.time}" styleClass="input-text" required="true" >
+                  <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                </h:inputText>
+                <h:message for="time" style="color:#e11d48; font-weight:600;" />
+              </div>
+              <div class="form-field">
+                <label for="vehicleApplication" class="form-label">Vehicle Number</label>
+                <h:inputText id="vehicleApplication" value="#{offenceBean.vehicleApplication.vehNo}" styleClass="input-text" required="true" />
+                <h:message for="vehicleApplication" style="color:#e11d48; font-weight:600;" />
+              </div>
+              <div class="form-field">
+                <label for="users" class="form-label">Reported By (Username)</label>
+                <h:outputText value="#{offenceBean.users.username}" styleClass="input-text" style="background:#e3f2fd;color:#1976d2;font-weight:700; border:1.5px solid #1976d2; border-radius:7px; padding:10px 16px; display:block;" />
+              </div>
+              <div class="form-field">
+                <label for="offenseDetails" class="form-label">Offense Details</label>
+                <h:selectOneMenu id="offenseDetails" value="#{offenceBean.selectedOffenseId}" styleClass="input-select" required="true">
+                  <f:selectItem itemLabel="-- Select Offense --" itemValue="" />
+                  <f:selectItems value="#{offenceBean.offenceSelectItems}" />
+                </h:selectOneMenu>
+                <h:message for="offenseDetails" style="color:#e11d48; font-weight:600;" />
+              </div>
+
+              <div class="form-field">
+                <label for="imageUpload" class="form-label">Upload Image</label>
+                <h:inputFile id="imageUpload" value="#{offenceBean.uploadedFile}" styleClass="input-text" />
+                <h:message for="imageUpload" style="color:#e11d48; font-weight:600;" />
+              </div>
+              <h:commandButton value="Submit" action="#{offenceBean.addOffense}" styleClass="submit-btn" />
+            </h:form>
+          </div>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{offenceBean.pageMode eq 'update'}">
+          <div class="container">
+            <h2>
+              <span class="material-icons" style="vertical-align:middle;color:#1976d2;">clear_all</span>
+              Search Pending Offenses by Vehicle Number
+            </h2>
+
+            <h:form id="searchForm" prependId="false">
+              <div class="form-field" style="display: flex; align-items: center; gap: 10px;">
+                <label for="searchVehNo" class="form-label" style="margin-bottom: 0;">Vehicle Number:</label>
+                <h:inputText id="searchVehNo" value="#{offenceBean.searchVehNo}" styleClass="input-text" />
+                <h:commandButton value="Search" action="#{offenceBean.searchByVehicleNumber}" styleClass="submit-btn" />
+              </div>
+              <h:messages globalOnly="true" style="color: red; margin-top: 10px;" />
+            </h:form>
+
+            <h:panelGroup rendered="#{not empty offenceBean.pendingOffenses}">
+              <h:panelGroup styleClass="heading2" layout="block">
+                <h:outputText value="Pending Offenses for Vehicle: " />
+                <h:outputText value="#{offenceBean.searchVehNo}" />
+              </h:panelGroup>
+
+              <h:form id="offensesForm" prependId="false">
+                <h:dataTable value="#{offenceBean.pendingOffenses}" var="offense" styleClass="datatable">
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="ID" /></f:facet>
+                    <h:outputText value="#{offense.offenceDetailId}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Status" /></f:facet>
+                    <h:outputText value="#{offense.offenceStatus}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Place" /></f:facet>
+                    <h:outputText value="#{offense.place}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Time" /></f:facet>
+                    <h:outputText value="#{offense.time}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Penalty" /></f:facet>
+                    <h:outputText value="#{offense.offenseDetails.penalty}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Vehicle No." /></f:facet>
+                    <h:outputText value="#{offense.vehicleApplication.vehNo}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Reported By" /></f:facet>
+                    <h:outputText value="#{offense.users.username}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Clear" /></f:facet>
+                    <h:selectBooleanCheckbox value="#{offense.selected}" />
+                  </h:column>
+                </h:dataTable>
+
+                <div style="text-align:right; margin-top:18px;">
+                  <h:outputText id="totalPenalty"
+                                value="Total Penalty: ₹ #{offenceBean.totalPenalty}"
+                                style="font-weight:bold; font-size:1.15em; color:#1976d2; background:#e3f2fd; border-radius:6px; padding:8px 18px; display:inline-block;" />
+                </div>
+                <h:commandButton value="Update Total" action="#{offenceBean.calculateTotalPenalty}" styleClass="action-btn" style="margin-top:18px; margin-right:14px;" />
+
+                <h:panelGroup rendered="#{!offenceBean.showConfirmClear}">
+                  <h:commandButton value="Clear Selected"
+                                   action="#{offenceBean.askClearSelectedOffenses}"
+                                   styleClass="submit-btn"
+                                   style="margin-top:18px;" />
+                </h:panelGroup> <h:panelGroup rendered="#{offenceBean.showConfirmClear}">
+                  <div class="confirm-panel">
+                    <div class="confirm-title">
+                      Are you sure you want to clear the selected offenses?<br/>
+                      Total Penalty: ₹ <h:outputText value="#{offenceBean.totalPenalty}" />
+                    </div>
+                    <h:commandButton value="Yes, Confirm" action="#{offenceBean.confirmClearSelectedOffenses}" styleClass="submit-btn" />
+                    <h:commandButton value="Cancel" action="#{offenceBean.cancelClearSelectedOffenses}" styleClass="action-btn" />
+                  </div>
+                </h:panelGroup>
+              </h:form>
+            </h:panelGroup>
+          </div>
+        </h:panelGroup>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

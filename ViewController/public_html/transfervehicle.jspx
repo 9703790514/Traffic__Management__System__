@@ -1,0 +1,438 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:ui="http://java.sun.com/jsf/facelets">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <!-- IMPORTANT: Ensure character encoding is UTF-8 for proper display -->
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Transfer Vehicle</title>
+        <!-- IMPORTANT: Ensure meta charset is UTF-8 for proper browser rendering -->
+        <meta charset="UTF-8" />
+        <style>
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            color: #3a3a7c;
+          }
+          .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 48px 40px;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+          }
+          h2 {
+            margin-top: 0;
+            margin-bottom: 32px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-align: center;
+          }
+          h3 {
+            color: #fbb034;
+            margin-top: 36px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+            border-bottom: 2px solid #fbb034;
+            padding-bottom: 6px;
+          }
+          .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 16px;
+          }
+          .form-label {
+            width: 180px;
+            font-weight: 600;
+            color: #3a3a7c;
+            font-size: 1em;
+            text-align: right;
+            user-select: none;
+          }
+          .form-controls {
+            flex: 1;
+          }
+          .input-field, .input-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #f9f9fc;
+            color: #3a3a7c;
+            transition: border-color 0.3s ease;
+          }
+          .input-field:focus, .input-select:focus {
+            border-color: #fbb034;
+            outline: none;
+            background: #fffbe7;
+            box-shadow: 0 2px 8px #fbb03488;
+          }
+          .btn {
+            background: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            user-select: none;
+          }
+          .btn:hover, .btn:focus {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+            outline: none;
+          }
+          .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px 40px;
+          }
+          @media (max-width: 900px) {
+            .container {
+              padding: 32px 24px;
+              max-width: 95vw;
+            }
+            .two-col-grid {
+              grid-template-columns: 1fr;
+              gap: 16px 0;
+            }
+            .form-row {
+              flex-direction: column;
+              align-items: stretch;
+            }
+            .form-label {
+              width: 100%;
+              text-align: left;
+              margin-bottom: 6px;
+            }
+          }
+          .error-messages {
+            color: #e11d48;
+            font-weight: 700;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1em;
+          }
+          /* New style for the message when no offenses are found */
+          .info-message {
+            text-align: center;
+            color: #3a3a7c;
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-weight: 600;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Transfer Vehicle</h2>
+          <h:form id="transferVehicleForm">
+
+            <div class="form-row">
+              <h:outputLabel for="vehicleNumber" value="Enter Vehicle Number:" styleClass="form-label" />
+              <div class="form-controls">
+                <h:inputText id="vehicleNumber" value="#{transferVehicleBean.vehicleNumber}" size="15" styleClass="input-field" />
+              </div>
+              <div>
+                <h:commandButton id="searchCurrentVehicleBtn" value="Search" action="#{transferVehicleBean.searchVehicle}" styleClass="btn"/>
+              </div>
+            </div>
+
+            <h3>Current Owner</h3>
+            <div class="two-col-grid">
+              <div class="form-row">
+                <h:outputLabel value="Owner ID:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerId" value="#{transferVehicleBean.currentOwner.ownerId}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="First Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerFname" value="#{transferVehicleBean.currentOwner.fname}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Last Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerLname" value="#{transferVehicleBean.currentOwner.lname}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Temporary Address:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerTempAddr" value="#{transferVehicleBean.currentOwner.tempAddr}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Permanent Address:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerPermAddr" value="#{transferVehicleBean.currentOwner.permAddr}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Landline:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerLandlineNo" value="#{transferVehicleBean.currentOwner.landlineNo}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Mobile No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerMobileNo" value="#{transferVehicleBean.currentOwner.mobileNo}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Gender:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerGender" value="#{transferVehicleBean.currentOwner.gender}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Occupation:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerOccupation" value="#{transferVehicleBean.currentOwner.occupation}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Pincode:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerPincode" value="#{transferVehicleBean.currentOwner.pincode}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Pancard:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerPancardNo" value="#{transferVehicleBean.currentOwner.pancardNo}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Address Proof:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentOwnerAddProofName" value="#{transferVehicleBean.currentOwner.addProofName}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+            </div>
+
+            <h3>Vehicle Details</h3>
+            <div class="two-col-grid">
+              <div class="form-row">
+                <h:outputLabel value="Vehicle ID:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleId" value="#{transferVehicleBean.currentVehicle.vehId}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Vehicle Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleName" value="#{transferVehicleBean.currentVehicle.vehName}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Vehicle Type:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleType" value="#{transferVehicleBean.currentVehicle.vehType}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Model No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleModelNo" value="#{transferVehicleBean.currentVehicle.modelNo}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Manufacturer Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleManufacturerName" value="#{transferVehicleBean.currentVehicle.manufacturerName}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Engine No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleEngineNo" value="#{transferVehicleBean.currentVehicle.engineNo}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Color:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleColor" value="#{transferVehicleBean.currentVehicle.vehColor}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Fuel Used:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleFuelUsed" value="#{transferVehicleBean.currentVehicle.fuelUsed}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Cubic Capacity:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleCubicCapacity" value="#{transferVehicleBean.currentVehicle.cubicCapacity}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="No of Cylinders:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleNoOfCylinders" value="#{transferVehicleBean.currentVehicle.noOfCylinders}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Date of Manufacture:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="currentVehicleDateOfManufacture" value="#{transferVehicleBean.currentVehicle.dateOfManufacture}" readonly="true" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <span class="form-label"></span>
+                <div class="form-controls" style="text-align:left;">
+                  <!-- Action points to the checkOffenses method in the bean -->
+                  <h:commandButton value="Check Offenses" action="#{transferVehicleBean.checkOffenses}" styleClass="btn" />
+                </div>
+              </div>
+            </div>
+
+            <hr/>
+            <!-- Removed the previous table display for pending offenses -->
+            <!-- Display message if no pending offenses are found -->
+            <h:panelGroup id="offensesMessagePanel" layout="block" rendered="#{not empty transferVehicleBean.offensesMessage}">
+                <p class="info-message">
+                    <h:outputText value="#{transferVehicleBean.offensesMessage}" />
+                </p>
+            </h:panelGroup>
+
+            <hr/>
+
+            <div class="form-row" style="margin-bottom: 24px;">
+              <span class="form-label"></span>
+              <div class="form-controls">
+                <h:outputLabel for="newOwnerOwnsVehicleChk" styleClass="checkbox-label">New Owner owns a vehicle</h:outputLabel>
+                <h:selectBooleanCheckbox id="newOwnerOwnsVehicleChk"
+                                         value="#{transferVehicleBean.newOwnerOwnsVehicle}"
+                                         onchange="this.form.submit();" /> </div>
+            </div>
+
+            <div class="form-row">
+              <h:outputLabel for="newOwnerVehicleNumberInput" value="Enter Vehicle Number (New Owner):" styleClass="form-label" />
+              <div class="form-controls">
+                <h:inputText id="newOwnerVehicleNumberInput"
+                             value="#{transferVehicleBean.newOwnerVehicleNumber}"
+                             size="15"
+                             styleClass="input-field"
+                             disabled="#{!transferVehicleBean.newOwnerOwnsVehicle}" />
+              </div>
+              <div style="margin-left: 10px;">
+                <h:commandButton id="newOwnerVehicleSearchBtn"
+                                 value="Search"
+                                 action="#{transferVehicleBean.searchNewOwnerVehicle}"
+                                 disabled="#{!transferVehicleBean.newOwnerOwnsVehicle}"
+                                 styleClass="btn"/>
+              </div>
+            </div>
+
+            <h3>New Owner's Details</h3>
+            <div class="two-col-grid">
+              <div class="form-row">
+                <h:outputLabel value="First Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerFname" value="#{transferVehicleBean.newOwnerDetails.fname}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Last Name:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerLname" value="#{transferVehicleBean.newOwnerDetails.lname}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Temporary Address:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerTempAddr" value="#{transferVehicleBean.newOwnerDetails.tempAddr}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Permanent Address:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerPermAddr" value="#{transferVehicleBean.newOwnerDetails.permAddr}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Landline No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerLandlineNo" value="#{transferVehicleBean.newOwnerDetails.landlineNo}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Mobile No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerMobileNo" value="#{transferVehicleBean.newOwnerDetails.mobileNo}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Gender:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerGender" value="#{transferVehicleBean.newOwnerDetails.gender}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Occupation:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerOccupation" value="#{transferVehicleBean.newOwnerDetails.occupation}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Pincode:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerPincode" value="#{transferVehicleBean.newOwnerDetails.pincode}" styleClass="input-field" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel for="newOwnerPancardNo" value="Pancard No:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerPancardNo" value="#{transferVehicleBean.newOwnerDetails.pancardNo}" styleClass="input-field"  />
+                  <h:message for="newOwnerPancardNo" style="color: red; font-size: 0.9em;" />
+                </div>
+              </div>
+              <div class="form-row">
+                <h:outputLabel value="Address Proof:" styleClass="form-label" />
+                <div class="form-controls">
+                  <h:inputText id="newOwnerAddProofName" value="#{transferVehicleBean.newOwnerDetails.addProofName}" styleClass="input-field" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row" style="justify-content: center; margin-top: 30px;">
+              <h:commandButton value="Create New Owner" action="#{transferVehicleBean.createOwner}" styleClass="btn" />
+              <h:commandButton value="Transfer Vehicle" action="#{transferVehicleBean.submitTransfer}" styleClass="btn" style="margin-left: 20px;" />
+            </div>
+
+            <h:messages id="globalMessages" styleClass="error-messages" globalOnly="true" layout="table" />
+          </h:form>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

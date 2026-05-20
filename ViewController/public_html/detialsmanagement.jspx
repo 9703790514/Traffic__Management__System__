@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <jsp:directive.page isELIgnored="false"/>
+  <f:view>
+    <html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
+        <title>Details Management</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        <style type="text/css">
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            padding: 40px 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #3a3a7c;
+          }
+          /* Navbar */
+          .navbar {
+            background: transparent;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            padding: 12px 0;
+            box-shadow: none;
+            text-align: center;
+          }
+          .navbar > div {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+          .nav-btn {
+            background: #fbb034;
+            border: none;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease;
+            margin: 0 4px;
+          }
+          .nav-btn.active, .nav-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+          }
+          /* Container for content */
+          .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 32px 40px;
+            box-sizing: border-box;
+            margin-top: 32px;
+          }
+          .center-messages {
+            max-width: 900px;
+            margin: 16px auto 24px auto;
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+          }
+          h1, h2, h3 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+          }
+          .details-panel {
+            border: 1.5px solid #b6e0fe;
+            background: #fff;
+            padding: 28px 38px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(70,130,180,0.1);
+            margin-top: 24px;
+          }
+          .details-grid {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          /* Transparent background for label cells */
+          .details-grid td.label {
+            font-weight: 700;
+            color: #1976d2;
+            width: 200px;
+            background: transparent;
+            border-radius: 6px 0 0 6px;
+            letter-spacing: 0.1em;
+            padding: 10px 12px;
+            vertical-align: top;
+          }
+          /* Transparent background for value cells */
+          .details-grid td.value {
+            color: #222;
+            background: transparent;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 12px;
+            vertical-align: top;
+          }
+          .offense-image-thumb {
+            border-radius: 6px;
+            border: 1px solid #b6e0fe;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            max-width: 60px;
+            max-height: 60px;
+            margin-right: 8px;
+            cursor: pointer;
+          }
+          .no-image {
+            color: #b0b0b0;
+            font-style: italic;
+          }
+          .search-panel {
+            margin-top: 44px;
+            text-align: center;
+            background: #fafdff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(70,130,180,0.15);
+            padding: 24px 0 28px 0;
+          }
+          .search-panel h:outputLabel {
+            font-size: 1.2em;
+            color: #1976d2;
+            font-weight: 600;
+            margin-right: 12px;
+          }
+          /* Transparent background for input fields */
+          .search-panel h:inputText,
+          .input-text, .input-password, .input-select {
+            font-size: 1em;
+            padding: 8px 14px;
+            margin-right: 12px;
+            border-radius: 8px;
+            border: 1.5px solid #90caf9;
+            background: transparent;
+            transition: border 0.2s;
+            color: #3a3a7c;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 300px;
+          }
+          .search-panel h:inputText:focus,
+          .input-text:focus, .input-password:focus, .input-select:focus {
+            border: 1.5px solid #1976d2;
+            background: transparent;
+            color: #3a3a7c;
+            outline: none;
+            box-shadow: 0 2px 8px #fbb03488;
+          }
+          .search-panel h:commandButton {
+            font-size: 1em;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 22px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.2s;
+          }
+          .search-panel h:commandButton:hover {
+            background: #48cae4;
+            color: #fff;
+          }
+          h:dataTable {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+          }
+          th {
+            background: #48cae4;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 0.1em;
+            padding: 12px 10px;
+            border-radius: 8px 8px 0 0;
+            text-align: left;
+          }
+          td {
+            background: #fafdff;
+            color: #222;
+            padding: 12px 10px;
+            border-bottom: 1px solid #b6e0fe;
+          }
+          @media (max-width: 1000px) {
+            .container, .details-panel, .search-panel {
+              max-width: 98vw;
+              padding-left: 3vw;
+              padding-right: 3vw;
+            }
+          }
+          @media (max-width: 700px) {
+            .navbar {
+              margin: 0 8px;
+              width: calc(100% - 16px);
+              border-radius: 8px;
+            }
+            .nav-btn-row {
+              gap: 6px;
+            }
+            .container, .details-panel, .search-panel {
+              padding: 16px 12px;
+            }
+            .details-grid td.label, .details-grid td.value {
+              display: block;
+              width: 100%;
+              border-radius: 6px;
+              margin-bottom: 8px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <!-- Navbar -->
+        <div class="navbar">
+  <h:form>
+    <div class="nav-btn-row">
+      <h:commandButton value="Dashboard" action="#{navigationBean.dashboard}" styleClass="#{offenceBean.pageMode eq 'dashboard' ? 'nav-btn active' : 'nav-btn'}">
+        <f:setPropertyActionListener target="#{offenceBean.pageMode}" value="dashboard"/>
+      </h:commandButton>
+      <h:commandButton value="Owner Details" styleClass="#{offenceBean.pageMode eq 'owner' ? 'nav-btn active' : 'nav-btn'}" action="#{offenceBean.setPageModeOwner}" />
+      <h:commandButton value="Vehicle Details" styleClass="#{offenceBean.pageMode eq 'vehicle' ? 'nav-btn active' : 'nav-btn'}" action="#{offenceBean.setPageModeVehicle}" />
+      <h:commandButton value="Offence Details" styleClass="#{offenceBean.pageMode eq 'offence' ? 'nav-btn active' : 'nav-btn'}" action="#{offenceBean.setPageModeOffence}" />
+    </div>
+  </h:form>
+</div>
+<!-- Centered Global Messages inside container -->
+        <div class="container">
+          <h:panelGroup rendered="#{not empty facesContext.maximumSeverity}">
+            <div class="center-messages">
+              <h:messages globalOnly="true" style="color: #e63946;" />
+            </div>
+          </h:panelGroup>
+
+          <!-- Owner Details -->
+          <h:panelGroup rendered="#{offenceBean.pageMode eq 'owner'}" styleClass="search-panel">
+            <h:form>
+              <h:outputLabel value="Enter Vehicle Number:" for="ownerVehNo" />
+              <h:inputText id="ownerVehNo" value="#{ownerBean.searchVehNo}" />
+              <h:commandButton value="Submit" action="#{ownerBean.fetchOwnerByVehicleNo}" />
+            </h:form>
+            <h:panelGroup rendered="#{not empty ownerBean.selectedOwner.fname}" styleClass="details-panel">
+              <h3>Owner Details</h3>
+              <h:panelGrid columns="2" styleClass="details-grid">
+                <h:outputLabel value="First Name:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.fname}" styleClass="value"/>
+                <h:outputLabel value="Last Name:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.lname}" styleClass="value"/>
+                <h:outputLabel value="Date of Birth:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.dateofbirth}" styleClass="value"/>
+                <h:outputLabel value="Gender:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.gender}" styleClass="value"/>
+                <h:outputLabel value="Mobile No:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.mobileNo}" styleClass="value"/>
+                <h:outputLabel value="Landline No:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.landlineNo}" styleClass="value"/>
+                <h:outputLabel value="Occupation:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.occupation}" styleClass="value"/>
+                <h:outputLabel value="Pancard No:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.pancardNo}" styleClass="value"/>
+                <h:outputLabel value="Permanent Address:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.permAddr}" styleClass="value"/>
+                <h:outputLabel value="Temporary Address:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.tempAddr}" styleClass="value"/>
+                <h:outputLabel value="Pincode:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.pincode}" styleClass="value"/>
+                <h:outputLabel value="Address Proof Name:" styleClass="label"/>
+                <h:outputText value="#{ownerBean.selectedOwner.addProofName}" styleClass="value"/>
+              </h:panelGrid>
+            </h:panelGroup>
+          </h:panelGroup>
+
+          <!-- Vehicle Details -->
+          <h:panelGroup rendered="#{offenceBean.pageMode eq 'vehicle'}" styleClass="search-panel">
+            <h:form>
+              <h:outputLabel value="Enter Vehicle Number:" for="vehicleVehNo" />
+              <h:inputText id="vehicleVehNo" value="#{vehicleBean.searchVehNo}" />
+              <h:commandButton value="Submit" action="#{vehicleBean.fetchVehicleByVehNo}" />
+            </h:form>
+            <h:panelGroup rendered="#{not empty vehicleBean.selectedVehicle.vehName}" styleClass="details-panel">
+              <h3>Vehicle Details</h3>
+              <h:panelGrid columns="2" styleClass="details-grid">
+                <h:outputLabel value="Vehicle Name:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.vehName}" styleClass="value"/>
+                <h:outputLabel value="Vehicle Type:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.vehType}" styleClass="value"/>
+                <h:outputLabel value="Vehicle Color:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.vehColor}" styleClass="value"/>
+                <h:outputLabel value="Manufacturer Name:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.manufacturerName}" styleClass="value"/>
+                <h:outputLabel value="Model No:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.modelNo}" styleClass="value"/>
+                <h:outputLabel value="Engine No:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.engineNo}" styleClass="value"/>
+                <h:outputLabel value="Fuel Used:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.fuelUsed}" styleClass="value"/>
+                <h:outputLabel value="Cubic Capacity:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.cubicCapacity}" styleClass="value"/>
+                <h:outputLabel value="No Of Cylinders:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.noOfCylinders}" styleClass="value"/>
+                <h:outputLabel value="Date Of Manufacture:" styleClass="label"/>
+                <h:outputText value="#{vehicleBean.selectedVehicle.dateOfManufacture}" styleClass="value"/>
+              </h:panelGrid>
+            </h:panelGroup>
+          </h:panelGroup>
+
+          <!-- Offence Details -->
+          <h:panelGroup rendered="#{offenceBean.pageMode eq 'offence'}" styleClass="search-panel">
+            <h:form>
+              <h:outputLabel value="Enter Vehicle Number:" for="offenceVehNo" />
+              <h:inputText id="offenceVehNo" value="#{offenceBean.searchVehNo}" />
+              <h:commandButton value="Submit" action="#{offenceBean.fetchOffenceByVehicleNo}" />
+            </h:form>
+            <h:panelGroup rendered="#{not empty offenceBean.pendingOffenses}" styleClass="details-panel">
+              <h3>Offence Details</h3>
+              <h:dataTable value="#{offenceBean.pendingOffenses}" var="offense" border="0" style="width:100%;margin-top:10px;">
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Offence ID"/></f:facet>
+                  <h:outputText value="#{offense.offenceDetailId}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Status"/></f:facet>
+                  <h:outputText value="#{offense.offenceStatus}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Place"/></f:facet>
+                  <h:outputText value="#{offense.place}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Time"/></f:facet>
+                  <h:outputText value="#{offense.time}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Vehicle Number"/></f:facet>
+                  <h:outputText value="#{offense.vehicleApplication.vehNo}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="User"/></f:facet>
+                  <h:outputText value="#{offense.users.username}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Image"/></f:facet>
+                  <h:outputText value="Image" rendered="#{not empty offense.image}" />
+                  <h:outputText value="No Image" rendered="#{empty offense.image}" />
+                </h:column>
+              </h:dataTable>
+            </h:panelGroup>
+          </h:panelGroup>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

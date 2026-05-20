@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+             version="1.0">
+  <persistence-unit name="Model">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:/app/jdbc/jdbc/Connection1DS</jta-data-source>
+    <class>training.iqgateway.entities.Offense</class>
+    <class>training.iqgateway.entities.OffenseDetails</class>
+    <class>training.iqgateway.entities.Owner</class>
+    <class>training.iqgateway.entities.Roles</class>
+    <class>training.iqgateway.entities.Users</class>
+    <class>training.iqgateway.entities.Vehicle</class>
+    <class>training.iqgateway.entities.VehicleApplication</class>
+    <properties>
+      <property name="eclipselink.target-server" value="WebLogic_10"/>
+      <property name="javax.persistence.jtaDataSource"
+                value="java:/app/jdbc/jdbc/Connection1DS"/>
+    </properties>
+  </persistence-unit>
+</persistence>

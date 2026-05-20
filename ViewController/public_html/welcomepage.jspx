@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <f:view>
+    <html>
+      <head>
+        <meta http-equiv="Content-Type"
+              content="text/html; charset=windows-1252"/>
+        <title>Welcome Page - Traffic Management System</title>
+        <style type="text/css">
+          :root {
+            --primary: #3a3a7c;
+            --accent: #fbb034;
+            --bg: #f6f7fb;
+            --header-bg: linear-gradient(90deg, #3a3a7c 60%, #fbb034 100%);
+            --footer-bg: #22224b;
+            --white: #fff;
+            --shadow: 0 4px 24px rgba(58,58,124,0.08);
+          }
+          body {
+            margin: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: var(--bg);
+            color: #222;
+          }
+          .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary);
+            padding: 18px 40px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+          }
+          .navbar-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 1px;
+          }
+          .navbar-buttons h:commandButton, .navbar-buttons input[type="submit"] {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, color .2s, transform .2s;
+            box-shadow: 0 2px 8px rgba(251,176,52,0.12);
+          }
+          .navbar-buttons h:commandButton:hover {
+            background: var(--white);
+            color: var(--accent);
+            transform: scale(1.05);
+          }
+          .header {
+            background: var(--header-bg);
+            color: var(--white);
+            padding: 60px 0 40px 0;
+            text-align: left;
+            border-bottom-left-radius: 60px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+          }
+          .header h1 {
+            font-size: 3em;
+            font-weight: 900;
+            margin: 0 0 12px 60px;
+            letter-spacing: 2px;
+            line-height: 1.1;
+          }
+          .header p {
+            font-size: 1.3em;
+            margin-left: 60px;
+            margin-bottom: 0;
+            opacity: 0.95;
+          }
+          .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 50px auto 40px auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 50px 40px;
+            align-items: center;
+          }
+          .main-content .info {
+            animation: fadeInLeft 1.2s;
+          }
+          .main-content .illustration {
+            text-align: center;
+            animation: fadeInRight 1.2s;
+          }
+          .main-content ul {
+            margin: 22px 0 0 0;
+            padding: 0 0 0 20px;
+            font-size: 1.1em;
+          }
+          .main-content li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+          }
+          .main-content img {
+            max-width: 240px;
+            border-radius: 18px;
+            box-shadow: 0 2px 24px rgba(58,58,124,0.13);
+            margin-top: 10px;
+            background: #fff;
+            padding: 18px;
+          }
+          /* Animations */
+          @keyframes fadeInLeft {
+            0% {opacity:0; transform: translateX(-40px);}
+            100% {opacity:1; transform: translateX(0);}
+          }
+          @keyframes fadeInRight {
+            0% {opacity:0; transform: translateX(40px);}
+            100% {opacity:1; transform: translateX(0);}
+          }
+          /* Animated Road and Cars */
+          .animated-road-wrapper {
+            width: 100%;
+            margin: 0 auto 0 auto;
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            background: transparent;
+          }
+          .road {
+            position: relative;
+            width: 80vw;
+            max-width: 900px;
+            height: 80px;
+            background: #222;
+            border-top: 8px solid #555;
+            border-bottom: 8px solid #555;
+            overflow: hidden;
+            border-radius: 18px;
+            margin: 0 auto;
+            box-shadow: 0 4px 18px rgba(34,34,75,0.09);
+          }
+          .road-lines {
+            position: absolute;
+            top: 36px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+              to right,
+              #fff 0 30px,
+              transparent 30px 60px
+            );
+            opacity: 0.7;
+            z-index: 2;
+          }
+          .car {
+            position: absolute;
+            bottom: 18px;
+            width: 60px;
+            height: 35px;
+            z-index: 3;
+            background: linear-gradient(120deg, #fbb034 60%, #3a3a7c 100%);
+            border-radius: 10px 20px 15px 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          }
+          .car:before, .car:after {
+            content: '';
+            position: absolute;
+            bottom: -9px;
+            width: 16px;
+            height: 16px;
+            background: #222;
+            border-radius: 50%;
+            border: 3px solid #fff;
+          }
+          .car:before {
+            left: 6px;
+          }
+          .car:after {
+            right: 6px;
+          }
+          /* Left-to-right car animation */
+          .car-left {
+            left: -70px;
+            animation: car-left-move 6s linear infinite;
+          }
+          @keyframes car-left-move {
+            0% { left: -70px; }
+            50% { left: calc(100% - 70px); transform: scaleX(1);}
+            51% { transform: scaleX(-1);}
+            100% { left: -70px; transform: scaleX(-1);}
+          }
+          /* Right-to-left car animation */
+          .car-right {
+            left: calc(100% - 70px);
+            background: linear-gradient(120deg, #3a3a7c 60%, #fbb034 100%);
+            animation: car-right-move 6s linear infinite;
+            animation-delay: 3s;
+          }
+          @keyframes car-right-move {
+            0% { left: calc(100% - 70px); transform: scaleX(-1);}
+            50% { left: 0; transform: scaleX(-1);}
+            51% { transform: scaleX(1);}
+            100% { left: calc(100% - 70px); transform: scaleX(1);}
+          }
+          .footer {
+            background: var(--footer-bg);
+            color: var(--white);
+            text-align: center;
+            padding: 28px 0 18px 0;
+            font-size: 1.1em;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+            width: 100%;
+            box-shadow: 0 -2px 12px rgba(34,34,75,0.12);
+            margin-top: 0;
+            position: relative;
+            z-index: 10;
+          }
+          @media (max-width: 900px) {
+            .main-content {
+              grid-template-columns: 1fr;
+              padding: 30px 15px;
+            }
+            .header h1, .header p {
+              margin-left: 20px;
+            }
+            .road {
+              width: 98vw;
+              min-width: 0;
+            }
+          }
+        </style>
+        <!-- Google Fonts for modern typography -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet"/>
+      </head>
+      <body>
+        <!-- Navigation Bar -->
+        <div class="navbar">
+          <span class="navbar-title">Traffic Management System</span>
+          <div class="navbar-buttons">
+            <h:form>
+              <h:commandButton value="Login" action="#{loginBean.login}" />
+            </h:form>
+          </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+          <h1>Welcome to the Future<br/>of Traffic Management</h1>
+          <p>Smart, safe, and seamless mobility for your city.</p>
+        </div>
+
+        <!-- Main Body Content -->
+        <div class="main-content">
+          <div class="info">
+            <h2 style="font-size:2em; font-weight:800; color:#3a3a7c; margin-bottom:10px;">Why Choose Us?</h2>
+            <p>
+              Our Traffic Management System leverages AI, real-time analytics, and intuitive dashboards to revolutionize urban mobility and safety.
+            </p>
+            <ul>
+              <li>Live traffic monitoring &amp; predictive congestion alerts</li>
+              <li>Automated, adaptive traffic signal control</li>
+              <li>Instant incident detection &amp; emergency response</li>
+              <li>Data-driven infrastructure planning</li>
+              <li>Mobile-friendly, accessible design for all users</li>
+            </ul>
+          </div>
+          <div class="illustration">
+            <img src="https://img.icons8.com/ios-filled/50/car.png"
+                 alt="Traffic Management System Icon"/>
+          </div>
+        </div>
+
+        <!-- Animated Road with Two Cars (now above the footer, not fixed) -->
+      
+
+        <!-- Footer -->
+        <div class="footer">
+          &copy; 2025 Traffic Management System. All rights reserved.
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

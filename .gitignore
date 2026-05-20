@@ -1,0 +1,85 @@
+# Oracle JDeveloper
+*.jws
+*.jpr
+*.jpx
+.data/
+
+# Compiled class files
+*.class
+classes/
+build/
+dist/
+deploy/
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.nar
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Oracle specific
+*.offlinedb
+cwallet.sso
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+nbproject/
+
+# OS specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# WebLogic specific
+.wlsjsps/
+wlsdeploy/
+
+# Database files (keep schema definitions, ignore data)
+*.db
+*.sqlite
+
+# Security files (if any)
+*.jks
+*.keystore
+*.pem
+*.key
+
+# Build artifacts
+target/
+out/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# Application server logs
+server.log
+access.log
+
+# Generated files
+Generated*/

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.1">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <jsp:output omit-xml-declaration="true"
+              doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <f:view>
+    <html>
+      <head>
+        <title>User Management</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        <style type="text/css">
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #3a3a7c;
+          }
+          /* Navbar full width outside container with transparent background */
+          .navbar {
+            background: transparent;
+            box-shadow: none;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 0;
+            width: 100%;
+          }
+          .navbar > div {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+          .nav-btn {
+            background: #fbb034;
+            border: none;
+            color: #3a3a7c;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+          }
+          .nav-btn.active, .nav-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+          }
+          /* Removed .center-messages, as global messages are now in modal */
+          .container {
+            width: 100%;
+            max-width: 720px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 48px 40px;
+            box-sizing: border-box;
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+          }
+          h1, h2 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+          }
+          .form-field {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+          }
+          .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #3a3a7c;
+          }
+          .input-text, .input-password, .input-select {
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #f9f9fc;
+            transition: border-color 0.3s ease;
+            color: #3a3a7c;
+            width: 100%;
+            box-sizing: border-box;
+          }
+          .input-text:focus, .input-password:focus, .input-select:focus {
+            border-color: #fbb034;
+            outline: none;
+            background: #fffbe7;
+            box-shadow: 0 2px 8px #fbb03488;
+          }
+          .submit-btn, .action-btn {
+            background: #fbb034;
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            margin-right: 12px;
+          }
+          .submit-btn:hover, .action-btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+          }
+          .action-btn {
+            background: #ccc;
+            color: #555;
+            margin-right: 0;
+          }
+          .action-btn:hover {
+            background: #999;
+            color: #fff;
+          }
+          .datatable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background: #f9f9fc;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(58,58,124,0.1);
+          }
+          .datatable th, .datatable td {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 16px;
+            text-align: left;
+            color: #3a3a7c;
+          }
+          .datatable th {
+            background: #fbb03422;
+            font-weight: 700;
+            font-size: 1em;
+          }
+          .datatable tr:nth-child(even) {
+            background: #fffbe7;
+          }
+          .datatable tr:hover {
+            background: #fbb03444;
+          }
+          .datatable tr:last-child td {
+            border-bottom: none;
+          }
+          .default-message {
+            margin-top: 40px;
+            background: #fffbe7;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            color: #3a3a7c;
+          }
+          .confirm-panel {
+            background: #fffbe7;
+            border: 1.5px solid #fbb034;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px auto 0 auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            color: #3a3a7c;
+          }
+          .confirm-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 16px;
+          }
+          @media (max-width: 768px) {
+            .container {
+              padding: 32px 24px;
+              max-width: 95vw;
+            }
+            .nav-btn {
+              padding: 10px 14px;
+              font-size: 0.9em;
+            }
+          } /* Modal Overlay Styles (reused from pendingOffenses.jsp / roleManagement.jsp) */
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+          }
+
+          /* Modal Content Styles (reused from pendingOffenses.jsp / roleManagement.jsp) */
+          .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+          }
+          .modal-content h3 {
+            color: #3a3a7c;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+          }
+          .modal-content p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+          }
+          .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+          }
+          .modal-buttons .btn {
+            padding: 10px 25px;
+            margin: 0;
+            font-size: 0.95em;
+            background: #fbb034; /* Ensure button styling is consistent */
+            color: #3a3a7c;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+          }
+          .modal-buttons .btn:hover {
+            background: #3a3a7c;
+            color: #fbb034;
+            transform: translateY(-2px) scale(1.05);
+          }
+        </style>
+      </head>
+      <body>
+        <h:form>
+          <div class="navbar">
+            <div>
+              <h:commandButton value="Dashboard" action="#{userBean.dashboardPage}" styleClass="#{userBean.pageMode eq 'dashboard' ? 'nav-btn active' : 'nav-btn'}"/>
+              <h:commandButton value="Add User" styleClass="#{userBean.pageMode eq 'add' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{userBean.pageMode}" value="add"/>
+              </h:commandButton>
+              <h:commandButton value="Update User" styleClass="#{userBean.pageMode eq 'update' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{userBean.pageMode}" value="update"/>
+              </h:commandButton>
+              <h:commandButton value="Delete User" styleClass="#{userBean.pageMode eq 'delete' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{userBean.pageMode}" value="delete"/>
+              </h:commandButton>
+              <h:commandButton value="View Users" styleClass="#{userBean.pageMode eq 'view' ? 'nav-btn active' : 'nav-btn'}">
+                <f:setPropertyActionListener target="#{userBean.pageMode}" value="view"/>
+              </h:commandButton>
+            </div>
+          </div>
+        </h:form>
+
+        <div class="container">
+          <h:panelGroup rendered="#{userBean.pageMode eq 'none' and !userBean.showMessageModal}">
+            <div class="default-message">
+              <h2>Welcome to User Management</h2>
+              <p>Please select an option from the navigation bar to manage users.</p>
+            </div>
+          </h:panelGroup>
+
+          <h:panelGroup rendered="#{userBean.pageMode eq 'dashboard'}">
+            <h2>Dashboard</h2>
+            <p>Welcome to the User Management Dashboard. Here you can see summary statistics and quick links related to users.</p>
+            <p>Total Users: <h:outputText value="#{userBean.userCount}"/></p>
+            </h:panelGroup>
+
+          <h:panelGroup rendered="#{userBean.pageMode eq 'add'}">
+            <h2>Add User</h2>
+            <h:form>
+              <div class="form-field">
+                <label for="username" class="form-label">Username</label>
+                <h:inputText id="username" value="#{userBean.username}" styleClass="input-text" required="true" />
+                <h:message for="username" style="color:#dc2626; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="password" class="form-label">Password</label>
+                <h:inputSecret id="password" value="#{userBean.password}" styleClass="input-password" required="true" />
+                <h:message for="password" style="color:#dc2626; font-weight:600;"/>
+              </div>
+              <div class="form-field">
+                <label for="role" class="form-label">Role</label>
+                <h:selectOneMenu id="role" value="#{userBean.roleName}" styleClass="input-select" required="true">
+                  <f:selectItem itemLabel="-- Select Role --" itemValue="" />
+                  <f:selectItems value="#{userBean.roleNames}" />
+                </h:selectOneMenu>
+                <h:message for="role" style="color:#dc2626; font-weight:600;"/>
+              </div>
+              <h:commandButton value="Submit" action="#{userBean.addUser}" styleClass="submit-btn" />
+            </h:form>
+          </h:panelGroup>
+
+          <h:panelGroup rendered="#{userBean.pageMode eq 'update'}">
+            <h2>Update User</h2>
+            <h:form>
+              <h:panelGroup rendered="#{!userBean.editMode}">
+                <h:dataTable value="#{userBean.users}" var="user" styleClass="datatable">
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Username"/></f:facet>
+                    <h:outputText value="#{user.username}" />
+                  </h:column>
+                  <h:column>
+                    <f:facet name="header"><h:outputText value="Role"/></f:facet>
+                    <h:outputText value="#{user.roles.rolename}" />
+                  </h:column>
+                  <h:column><f:facet name="header"><h:outputText value="Action"/></f:facet>
+                    <h:commandButton value="Edit" action="#{userBean.startEdit}" styleClass="action-btn">
+                      <f:setPropertyActionListener target="#{userBean.selectedUser}" value="#{user}" />
+                      <f:setPropertyActionListener target="#{userBean.password}" value="#{user.password}" />
+                    </h:commandButton>
+                  </h:column>
+                </h:dataTable>
+              </h:panelGroup>
+              <h:panelGroup rendered="#{userBean.editMode}">
+                <div class="form-field">
+                  <label for="editUsername" class="form-label">Username</label>
+                  <h:inputText id="editUsername" value="#{userBean.selectedUser.username}" styleClass="input-text" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editPassword" class="form-label">Password</label>
+                  <h:inputSecret id="editPassword" value="#{userBean.password}" styleClass="input-password" required="true" />
+                </div>
+                <div class="form-field">
+                  <label for="editRole" class="form-label">Role</label>
+                  <h:selectOneMenu id="editRole" value="#{userBean.roleName}" styleClass="input-select" required="true">
+                    <f:selectItem itemLabel="-- Select Role --" itemValue="" />
+                    <f:selectItems value="#{userBean.roleNames}" />
+                  </h:selectOneMenu>
+                </div>
+                <h:commandButton value="Save" action="#{userBean.saveEdit}" styleClass="submit-btn"/>
+                <h:commandButton value="Cancel" action="#{userBean.cancelEdit}" styleClass="action-btn" immediate="true"/>
+              </h:panelGroup>
+            </h:form>
+          </h:panelGroup>
+
+          <h:panelGroup rendered="#{userBean.pageMode eq 'delete'}">
+            <h2>Delete User</h2>
+            <h:form>
+              <h:dataTable value="#{userBean.users}" var="user" styleClass="datatable">
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Username"/></f:facet>
+                  <h:outputText value="#{user.username}"/>
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Role"/></f:facet>
+                  <h:outputText value="#{user.roles.rolename}"/>
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Delete"/></f:facet>
+                  <h:commandButton value="Delete" styleClass="action-btn" action="#{userBean.askDelete}">
+                    <f:setPropertyActionListener target="#{userBean.selectedUser}" value="#{user}" />
+                  </h:commandButton>
+                </h:column>
+              </h:dataTable>
+            </h:form>
+            <h:form rendered="#{userBean.confirmDeleteMode}">
+              <div class="confirm-panel">
+                <div class="confirm-title">Are you sure you want to delete user: <h:outputText value="#{userBean.selectedUser.username}"/>?</div>
+                <h:panelGrid columns="2" style="margin: 0 auto;">
+                  <h:commandButton value="Yes, Delete" action="#{userBean.confirmDelete}" styleClass="action-btn"/>
+                  <h:commandButton value="Cancel" action="#{userBean.cancelDelete}" styleClass="action-btn" immediate="true"/>
+                </h:panelGrid>
+              </div>
+            </h:form>
+          </h:panelGroup>
+
+          <h:panelGroup rendered="#{userBean.pageMode eq 'view'}">
+            <h2>View Users</h2>
+            <h:form>
+              <h:dataTable value="#{userBean.users}" var="user" styleClass="datatable">
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Username"/></f:facet>
+                  <h:outputText value="#{user.username}" />
+                </h:column>
+                <h:column>
+                  <f:facet name="header"><h:outputText value="Role"/></f:facet>
+                  <h:outputText value="#{user.roles.rolename}" />
+                </h:column>
+              </h:dataTable>
+            </h:form>
+          </h:panelGroup>
+        </div>
+
+        <h:panelGroup id="messageModalPanel" layout="block" styleClass="modal-overlay" rendered="#{userBean.showMessageModal}">
+          <div class="modal-content">
+            <h3><h:outputText value="#{userBean.messageTitle}" /></h3>
+            <p><h:outputText value="#{userBean.messageContent}" /></p>
+            <div class="modal-buttons">
+              <h:form>
+                <h:commandButton value="Close" action="#{userBean.hideMessageModal}" styleClass="btn" />
+              </h:form>
+            </div>
+          </div>
+        </h:panelGroup>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

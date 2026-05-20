@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:f="http://java.sun.com/jsf/core"
+          version="2.1">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="true"
+                doctype-root-element="HTML"
+                doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+                doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+    <f:view>
+        <html>
+            <head>
+                <title>Vehicle Management</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+                <style type="text/css">
+                    body {
+                        font-family: 'Poppins', Arial, sans-serif;
+                        background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+                        margin: 0;
+                        min-height: 100vh;
+                        padding: 40px 0;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        color: #3a3a7c;
+                    }
+                    .navbar {
+                        background: transparent;
+                        position: sticky;
+                        top: 0;
+                        z-index: 100;
+                        width: 100%;
+                        padding: 12px 0;
+                        box-shadow: none;
+                        text-align: center;
+                    }
+                    .navbar > div {
+                        max-width: 720px;
+                        margin: 0 auto;
+                        display: flex;
+                        justify-content: center;
+                        gap: 12px;
+                        flex-wrap: nowrap;
+                    }
+
+                    .nav-btn {
+                        background: #fbb034;
+                        border: none;
+                        color: #3a3a7c;
+                        font-weight: 700;
+                        font-size: 1em;
+                        padding: 10px 20px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+                        transition: background 0.3s ease;
+                        margin: 0 4px;
+                    }
+                    .nav-btn.active, .nav-btn:hover {
+                        background: #3a3a7c;
+                        color: #fbb034;
+                    }
+                    .container {
+                        max-width: 720px;
+                        width: 100%;
+                        background: #fff;
+                        border-radius: 18px;
+                        box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+                        padding: 48px 40px;
+                        box-sizing: border-box;
+                        margin-top: 32px;
+                    }
+
+                    h1, h2 {
+                        margin-top: 0;
+                        margin-bottom: 24px;
+                        color: #3a3a7c;
+                        font-weight: 800;
+                        letter-spacing: 1px;
+                    }
+                    .form-field {
+                        margin-bottom: 20px;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .form-label {
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                        color: #3a3a7c;
+                    }
+                    .input-text {
+                        padding: 10px 14px;
+                        border: 1.5px solid #e0e0e0;
+                        border-radius: 10px;
+                        font-size: 1em;
+                        background: #f9f9fc;
+                        transition: border-color 0.3s ease;
+                        color: #3a3a7c;
+                        width: 100%;
+                        box-sizing: border-box; /* Ensure padding doesn't increase total width */
+                    }
+                    .input-text:focus {
+                        border-color: #fbb034;
+                        outline: none;
+                        background: #fffbe7;
+                        box-shadow: 0 2px 8px #fbb03488;
+                    }
+                    .submit-btn, .action-btn {
+                        background: #fbb034;
+                        color: #3a3a7c;
+                        border: none;
+                        border-radius: 10px;
+                        padding: 12px 24px;
+                        font-weight: 700;
+                        font-size: 1em;
+                        cursor: pointer;
+                        box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+                        transition: background 0.3s ease, transform 0.15s ease;
+                        margin-right: 12px;
+                    }
+                    .submit-btn:hover, .action-btn:hover {
+                        background: #3a3a7c;
+                        color: #fbb034;
+                        transform: translateY(-2px) scale(1.05);
+                    }
+                    .action-btn {
+                        background: #ccc;
+                        color: #555;
+                        margin-right: 0;
+                    }
+                    .action-btn:hover {
+                        background: #999;
+                        color: #fff;
+                    }
+                    .datatable {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        margin-top: 20px;
+                        background: #f9f9fc;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 12px rgba(58,58,124,0.1);
+                    }
+                    .datatable th, .datatable td {
+                        border-bottom: 1px solid #e0e0e0;
+                        padding: 12px 16px;
+                        text-align: left;
+                        color: #3a3a7c;
+                    }
+                    .datatable th {
+                        background: #fbb03422;
+                        font-weight: 700;
+                        font-size: 1em;
+                    }
+                    .datatable tr:nth-child(even) {
+                        background: #fffbe7;
+                    }
+                    .datatable tr:hover {
+                        background: #fbb03444;
+                    }
+                    .datatable tr:last-child td {
+                        border-bottom: none;
+                    }
+                    .default-message {
+                        margin-top: 40px;
+                        background: #fffbe7;
+                        padding: 20px;
+                        border-radius: 12px;
+                        box-shadow: 0 2px 12px rgba(251,176,52,0.15);
+                        font-weight: 600;
+                        font-size: 1.1em;
+                        text-align: center;
+                        color: #3a3a7c;
+                    }
+                    .confirm-panel {
+                        background: #fffbe7;
+                        border: 1.5px solid #fbb034;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin: 24px auto 0 auto;
+                        max-width: 400px;
+                        text-align: center;
+                        box-shadow: 0 2px 12px rgba(251,176,52,0.25);
+                        color: #3a3a7c;
+                    }
+                    .confirm-title {
+                        font-size: 1.2em;
+                        font-weight: 700;
+                        margin-bottom: 16px;
+                    }
+                    @media (max-width: 768px) {
+                        .container {
+                            padding: 32px 24px;
+                            max-width: 95vw;
+                        }
+                        .nav-btn {
+                            padding: 10px 14px;
+                            font-size: 0.9em;
+                        }
+                    }
+
+                    /* --- MODAL STYLES --- */
+                    .modal-overlay {
+                        position: fixed;
+                        z-index: 1000;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                        display: flex; /* Use flex to center */
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .modal-content {
+                        background-color: #fefefe;
+                        margin: auto; /* Not strictly needed with flex, but harmless */
+                        padding: 30px;
+                        border-radius: 15px;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                        max-width: 450px;
+                        width: 90%;
+                        text-align: center;
+                        position: relative;
+                    }
+
+                    /* No JS "close" button in this version, only the "OK" button */
+
+                    .modal-title {
+                        font-size: 1.5em;
+                        font-weight: 700;
+                        margin-bottom: 15px;
+                        color: #3a3a7c;
+                    }
+
+                    .modal-body {
+                        font-size: 1em;
+                        color: #555;
+                        margin-bottom: 25px;
+                    }
+
+                    /* Modal severity specific styles */
+                    .modal-success .modal-title { color: #4CAF50; }
+                    .modal-info .modal-title { color: #2196F3; }
+                    .modal-warn .modal-title { color: #FFC107; }
+                    .modal-error .modal-title { color: #F44336; }
+
+                    /* Border colors based on severity */
+                    .modal-success .modal-content { border: 2px solid #4CAF50; }
+                    .modal-info .modal-content { border: 2px solid #2196F3; }
+                    .modal-warn .modal-content { border: 2px solid #FFC107; }
+                    .modal-error .modal-content { border: 2px solid #F44336; }
+
+                    .readonly-text {
+                        background-color: #e9ecef; /* Light gray background for read-only fields */
+                        cursor: default; /* Indicate not editable */
+                    }
+
+                </style>
+            </head>
+            <body>
+                <h:form>
+    <div class="navbar">
+        <div>
+            <h:commandButton value="Dashboard" action="#{vehicleBean.navigateToDashboard}" styleClass="#{vehicleBean.pageMode eq 'dashboard' ? 'nav-btn active' : 'nav-btn'}"/>
+            <h:commandButton value="Add Vehicle" action="#{vehicleBean.navigateToAddVehicle}" styleClass="#{vehicleBean.pageMode eq 'add' ? 'nav-btn active' : 'nav-btn'}"/>
+            <h:commandButton value="Update Vehicle" action="#{vehicleBean.navigateToUpdateVehicle}" styleClass="#{vehicleBean.pageMode eq 'update' ? 'nav-btn active' : 'nav-btn'}"/>
+            <h:commandButton value="Delete Vehicle" action="#{vehicleBean.navigateToDeleteVehicle}" styleClass="#{vehicleBean.pageMode eq 'delete' ? 'nav-btn active' : 'nav-btn'}"/>
+            <h:commandButton value="View Vehicles" action="#{vehicleBean.navigateToViewVehicles}" styleClass="#{vehicleBean.pageMode eq 'view' ? 'nav-btn active' : 'nav-btn'}"/>
+        </div>
+    </div>
+</h:form>
+
+                <div class="container">
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'none'}">
+                        <div class="default-message">
+                            <h2>Welcome to Vehicle Management</h2>
+                            <p>Please select an option from the navigation bar to manage vehicles.</p>
+                        </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'dashboard'}">
+                        <div class="container">
+                            <h2>Dashboard</h2>
+                            <p>Welcome to the Vehicle Management Dashboard. Here you can see summary statistics and quick links.</p>
+                            <p>Total Vehicles: <h:outputText value="#{vehicleBean.vehicleCount}"/></p>
+                        </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'add'}">
+                        <h2>Add Vehicle</h2>
+                        <h:form>
+                            <div class="form-field">
+                                <label for="vehName" class="form-label">Vehicle Name</label>
+                                <h:inputText id="vehName" value="#{vehicleBean.vehName}" styleClass="input-text" required="true" />
+                                <h:message for="vehName" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="vehType" class="form-label">Vehicle Type</label>
+                                <h:inputText id="vehType" value="#{vehicleBean.vehType}" styleClass="input-text" required="true" />
+                                <h:message for="vehType" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="manufacturerName" class="form-label">Manufacturer Name</label>
+                                <h:inputText id="manufacturerName" value="#{vehicleBean.manufacturerName}" styleClass="input-text" required="true" />
+                                <h:message for="manufacturerName" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="modelNo" class="form-label">Model Number</label>
+                                <h:inputText id="modelNo" value="#{vehicleBean.modelNo}" styleClass="input-text" required="true" />
+                                <h:message for="modelNo" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="engineNo" class="form-label">Engine Number</label>
+                                <h:inputText id="engineNo" value="#{vehicleBean.engineNo}" styleClass="input-text" required="true" />
+                                <h:message for="engineNo" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="dateOfManufacture" class="form-label">Date of Manufacture</label>
+                                <h:inputText id="dateOfManufacture" value="#{vehicleBean.dateOfManufacture}" styleClass="input-text" required="true">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                </h:inputText>
+                                <h:message for="dateOfManufacture" style="color:#e11d48; font-weight:600;"/>
+                                <small>Format:YYYY-MM-DD HH:MM:SS</small>
+                            </div>
+                            <div class="form-field">
+                                <label for="cubicCapacity" class="form-label">Cubic Capacity</label>
+                                <h:inputText id="cubicCapacity" value="#{vehicleBean.cubicCapacity}" styleClass="input-text" />
+                                <h:message for="cubicCapacity" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="noOfCylinders" class="form-label">Number of Cylinders</label>
+                                <h:inputText id="noOfCylinders" value="#{vehicleBean.noOfCylinders}" styleClass="input-text" />
+                                <h:message for="noOfCylinders" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <div class="form-field">
+                                <label for="vehColor" class="form-label">Vehicle Color</label>
+                                <h:inputText id="vehColor" value="#{vehicleBean.vehColor}" styleClass="input-text" />
+                                <h:message for="vehColor" style="color:#e11d48; font-weight:600;"/>
+                            </div>
+                            <h:commandButton value="Submit" action="#{vehicleBean.addVehicle}" styleClass="submit-btn" />
+                        </h:form>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'update'}">
+                        <h2>Update Vehicle</h2>
+                        <h:form>
+                            <h:panelGroup rendered="#{!vehicleBean.editMode}">
+                                <h:dataTable value="#{vehicleBean.vehicles}" var="vehicle" styleClass="datatable">
+                                    <h:column>
+                                        <f:facet name="header"><h:outputText value="Vehicle ID"/></f:facet>
+                                        <h:outputText value="#{vehicle.vehId}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"><h:outputText value="Vehicle Name"/></f:facet>
+                                        <h:outputText value="#{vehicle.vehName}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"><h:outputText value="Vehicle Type"/></f:facet>
+                                        <h:outputText value="#{vehicle.vehType}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"><h:outputText value="Manufacturer"/></f:facet>
+                                        <h:outputText value="#{vehicle.manufacturerName}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"><h:outputText value="Action"/></f:facet>
+                                        <h:commandButton value="Edit" action="#{vehicleBean.startEdit}" styleClass="action-btn">
+                                            <f:setPropertyActionListener target="#{vehicleBean.selectedVehicle}" value="#{vehicle}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.vehName}" value="#{vehicle.vehName}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.vehType}" value="#{vehicle.vehType}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.manufacturerName}" value="#{vehicle.manufacturerName}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.modelNo}" value="#{vehicle.modelNo}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.engineNo}" value="#{vehicle.engineNo}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.dateOfManufacture}" value="#{vehicle.dateOfManufacture}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.cubicCapacity}" value="#{vehicle.cubicCapacity}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.noOfCylinders}" value="#{vehicle.noOfCylinders}" />
+                                            <f:setPropertyActionListener target="#{vehicleBean.vehColor}" value="#{vehicle.vehColor}" />
+                                        </h:commandButton>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{vehicleBean.editMode}">
+                                <div class="form-field">
+                                    <label for="editVehId" class="form-label">Vehicle ID</label>
+                                    <h:outputText id="editVehId" value="#{vehicleBean.selectedVehicle.vehId}" styleClass="input-text readonly-text" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editVehName" class="form-label">Vehicle Name</label>
+                                    <h:inputText id="editVehName" value="#{vehicleBean.vehName}" styleClass="input-text" required="true" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editVehType" class="form-label">Vehicle Type</label>
+                                    <h:inputText id="editVehType" value="#{vehicleBean.vehType}" styleClass="input-text" required="true" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editManufacturerName" class="form-label">Manufacturer Name</label>
+                                    <h:inputText id="editManufacturerName" value="#{vehicleBean.manufacturerName}" styleClass="input-text" required="true" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editModelNo" class="form-label">Model Number</label>
+                                    <h:inputText id="editModelNo" value="#{vehicleBean.modelNo}" styleClass="input-text" required="true" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editEngineNo" class="form-label">Engine Number</label>
+                                    <h:inputText id="editEngineNo" value="#{vehicleBean.engineNo}" styleClass="input-text" required="true" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editDateOfManufacture" class="form-label">Date of Manufacture</label>
+                                    <h:inputText id="editDateOfManufacture" value="#{vehicleBean.dateOfManufacture}" styleClass="input-text" required="true">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:inputText>
+                                    <small>Format:YYYY-MM-DD HH:MM:SS</small>
+                                </div>
+                                <div class="form-field">
+                                    <label for="editCubicCapacity" class="form-label">Cubic Capacity</label>
+                                    <h:inputText id="editCubicCapacity" value="#{vehicleBean.cubicCapacity}" styleClass="input-text" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editNoOfCylinders" class="form-label">Number of Cylinders</label>
+                                    <h:inputText id="editNoOfCylinders" value="#{vehicleBean.noOfCylinders}" styleClass="input-text" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="editVehColor" class="form-label">Vehicle Color</label>
+                                    <h:inputText id="editVehColor" value="#{vehicleBean.vehColor}" styleClass="input-text" />
+                                </div>
+                                <h:commandButton value="Save" action="#{vehicleBean.saveEdit}" styleClass="submit-btn" />
+                                <h:commandButton value="Cancel" action="#{vehicleBean.cancelEdit}" styleClass="action-btn" immediate="true" />
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'delete'}">
+                        <h2>Delete Vehicle</h2>
+                        <h:form>
+                            <h:dataTable value="#{vehicleBean.vehicles}" var="vehicle" styleClass="datatable">
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle ID" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehId}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle Name" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehName}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle Type" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehType}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Delete" /></f:facet>
+                                    <h:commandButton value="Delete" styleClass="action-btn" action="#{vehicleBean.askDelete}">
+                                        <f:setPropertyActionListener target="#{vehicleBean.selectedVehicle}" value="#{vehicle}" />
+                                    </h:commandButton>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                        <h:form rendered="#{vehicleBean.confirmDeleteMode}">
+                            <div class="confirm-panel">
+                                <div class="confirm-title">Are you sure you want to delete vehicle: <h:outputText value="#{vehicleBean.selectedVehicle.vehName}"/> (ID: <h:outputText value="#{vehicleBean.selectedVehicle.vehId}"/>)?</div>
+                                <h:panelGrid columns="2" style="margin: 0 auto;">
+                                    <h:commandButton value="Yes, Delete" action="#{vehicleBean.confirmDelete}" styleClass="action-btn" />
+                                    <h:commandButton value="Cancel" action="#{vehicleBean.cancelDelete}" styleClass="action-btn" immediate="true" />
+                                </h:panelGrid>
+                            </div>
+                        </h:form>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{vehicleBean.pageMode eq 'view'}">
+                        <h2>View Vehicles</h2>
+                        <h:form>
+                            <div class="form-field">
+                                <label for="searchEngineNo" class="form-label">Search by Engine Number</label>
+                                <h:inputText id="searchEngineNo" value="#{vehicleBean.searchVehNo}" styleClass="input-text" />
+                            </div>
+                            <h:commandButton value="Search" action="#{vehicleBean.fetchVehicleByVehNo}" styleClass="submit-btn" />
+
+                            <h:panelGroup rendered="#{vehicleBean.selectedVehicle.vehId ne null}">
+                                <h3>Vehicle Details:</h3>
+                                <div class="form-field">
+                                    <label class="form-label">Vehicle ID:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.vehId}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Vehicle Name:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.vehName}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Vehicle Type:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.vehType}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Manufacturer Name:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.manufacturerName}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Model Number:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.modelNo}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Engine Number:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.engineNo}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Date of Manufacture:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.dateOfManufacture}" styleClass="input-text readonly-text">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Cubic Capacity:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.cubicCapacity}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Number of Cylinders:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.noOfCylinders}" styleClass="input-text readonly-text"/>
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Vehicle Color:</label>
+                                    <h:outputText value="#{vehicleBean.selectedVehicle.vehColor}" styleClass="input-text readonly-text"/>
+                                </div>
+                            </h:panelGroup>
+                             <!--<h:panelGroup rendered="#{vehicleBean.vehicles.isEmpty()}">
+                                <p class="default-message">No vehicles available to display.</p>
+                            </h:panelGroup>-->
+                            <h:dataTable value="#{vehicleBean.vehicles}" var="vehicle" styleClass="datatable" rendered="#{not empty vehicleBean.vehicles and vehicleBean.selectedVehicle.vehId eq null}">
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle ID" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehId}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle Name" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehName}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Vehicle Type" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehType}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Manufacturer" /></f:facet>
+                                    <h:outputText value="#{vehicle.manufacturerName}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Model No." /></f:facet>
+                                    <h:outputText value="#{vehicle.modelNo}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Engine No." /></f:facet>
+                                    <h:outputText value="#{vehicle.engineNo}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Date of Mfg." /></f:facet>
+                                    <h:outputText value="#{vehicle.dateOfManufacture}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Cubic Capacity" /></f:facet>
+                                    <h:outputText value="#{vehicle.cubicCapacity}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Cylinders" /></f:facet>
+                                    <h:outputText value="#{vehicle.noOfCylinders}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><h:outputText value="Color" /></f:facet>
+                                    <h:outputText value="#{vehicle.vehColor}" />
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
+
+                <h:form>
+                    <h:panelGroup rendered="#{vehicleBean.showMessageModal}">
+                        <div id="messageModal" class="modal-overlay #{vehicleBean.messageSeverity.ordinal eq 0 ? 'modal-info' : (vehicleBean.messageSeverity.ordinal eq 1 ? 'modal-warn' : (vehicleBean.messageSeverity.ordinal eq 2 ? 'modal-error' : (vehicleBean.messageSeverity.ordinal eq 3 ? 'modal-error' : 'modal-info')))}">
+                            <div class="modal-content">
+                                <h3 class="modal-title">
+                                    <h:outputText value="#{vehicleBean.messageTitle}" />
+                                </h3>
+                                <p class="modal-body">
+                                    <h:outputText value="#{vehicleBean.messageContent}" />
+                                </p>
+                                <h:commandButton value="OK" action="#{vehicleBean.hideMessageModal}" styleClass="submit-btn" />
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

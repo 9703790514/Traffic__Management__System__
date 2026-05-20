@@ -1,0 +1,160 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <f:view>
+    <html>
+      <head>
+        <meta http-equiv="Content-Type"
+              content="text/html; charset=windows-1252"/>
+        <title>Login</title>
+        <style>
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .vehicle-app-container {
+            width: 420px;
+            padding: 36px 32px 32px 32px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInDown 1s;
+          }
+          @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-40px);}
+            100% { opacity: 1; transform: translateY(0);}
+          }
+          .vehicle-app-icon {
+            width: 54px;
+            height: 54px;
+            margin-bottom: 12px;
+            border-radius: 50%;
+            background: #fbb03422;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .vehicle-app-icon img {
+            width: 38px;
+            height: 38px;
+            display: block;
+          }
+          h2 {
+            text-align: center;
+            color: #3a3a7c;
+            font-weight: 800;
+            margin-bottom: 24px;
+            margin-top: 0;
+            letter-spacing: 1px;
+          }
+          .form-grid {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 16px;
+          }
+          .form-grid label {
+            font-weight: 600;
+            color: #555;
+            text-align: right;
+            padding-right: 10px;
+            vertical-align: middle;
+            font-size: 1em;
+          }
+          .form-grid input[type="text"], .form-grid input[type="password"] {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border 0.2s;
+            background: #f9f9fc;
+          }
+          .form-grid input[type="text"]:focus, .form-grid input[type="password"]:focus {
+            border: 1.5px solid #fbb034;
+            outline: none;
+            background: #fffbe7;
+          }
+          .submit-button {
+            background: linear-gradient(90deg, #fbb034 60%, #3a3a7c 100%);
+            color: white;
+            border: none;
+            padding: 12px 0;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.12);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 1px;
+          }
+          .submit-button:hover {
+            background: linear-gradient(90deg, #3a3a7c 60%, #fbb034 100%);
+            transform: translateY(-2px) scale(1.03);
+          }
+          .error-messages {
+            color: #e74c3c;
+            font-weight: 700;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1em;
+          }
+          @media (max-width: 600px) {
+            .vehicle-app-container {
+              width: 98vw;
+              padding: 20px 4vw;
+            }
+          }
+        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+      </head>
+      <body>
+        <div class="vehicle-app-container">
+          <div class="vehicle-app-icon">
+            <!-- You can use any icon here, or leave blank -->
+            <img src="https://img.icons8.com/ios-filled/50/car.png" alt="App Icon"/>
+          </div>
+          <h2>Login</h2>
+          <h:form>
+            <table class="form-grid">
+              <tr>
+                <td>
+                  <label for="username">Username:</label>
+                </td>
+                <td>
+                  <h:inputText id="username" value="#{loginBean.username}" required="true" requiredMessage="Username is required"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label for="password">Password:</label>
+                </td>
+                <td>
+                  <h:inputSecret id="password" value="#{loginBean.password}" required="true" requiredMessage="Password is required"/>
+                </td>
+              </tr>
+            </table>
+            <h:commandButton value="Login" action="#{loginBean.login}" styleClass="submit-button" />
+            <h:messages styleClass="error-messages"/>
+          </h:form>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

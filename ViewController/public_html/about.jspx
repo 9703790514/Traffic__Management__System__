@@ -1,0 +1,138 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=windows-1252"/>
+  <f:view>
+    <html>
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
+        <title>About | Traffic Management System</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+        <style>
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0; /* Added vertical space above and below */
+          }
+          .about-container {
+            width: 100%;
+            max-width: 1200px;
+            min-height: calc(100vh - 80px); /* Adjust height to account for body padding */
+            padding: 48px 40px;
+            background: #fff;
+            box-sizing: border-box;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+          }
+          .app-icon {
+            width: 54px;
+            height: 54px;
+            margin-bottom: 12px;
+            border-radius: 50%;
+            background: #fbb03422;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .app-icon img {
+            width: 38px;
+            height: 38px;
+            display: block;
+          }
+          h2 {
+            color: #3a3a7c;
+            font-weight: 800;
+            margin-bottom: 24px;
+            margin-top: 0;
+            letter-spacing: 1px;
+          }
+          p {
+            color: #555;
+            font-size: 1em;
+            line-height: 1.5;
+            margin-bottom: 16px;
+          }
+          ul.features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            color: #3a3a7c;
+            font-weight: 600;
+          }
+          ul.features li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+          }
+          ul.features li:before {
+            content: "?";
+            position: absolute;
+            left: 0;
+            color: #fbb034;
+          }
+          .back-button {
+            background: linear-gradient(90deg, #fbb034 60%, #3a3a7c 100%);
+            color: white;
+            border: none;
+            padding: 12px 0;
+            width: 180px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(251,176,52,0.12);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 1px;
+            align-self: center;
+          }
+          .back-button:hover {
+            background: linear-gradient(90deg, #3a3a7c 60%, #fbb034 100%);
+            transform: translateY(-2px) scale(1.03);
+          }
+          @media (max-width: 600px) {
+            .about-container {
+              padding: 24px 16px;
+            }
+            .back-button {
+              width: 100%;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="about-container">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/ios-filled/50/car.png" alt="App Icon"/>
+          </div>
+          <h2>Traffic Management System</h2>
+          <p>
+            <b>Traffic Management System</b> is a next-generation digital platform designed to make road traffic administration smarter, safer, and more transparent. Our system empowers authorities and citizens with real-time, secure, and user-friendly services for all traffic-related needs.
+          </p>
+          <ul class="features">
+            <li>Centralized management of vehicle, owner, and offense records</li>
+            <li>Role-based access for admins, clerks, police, RTO, and citizens</li>
+            <li>Easy registration, update, and deletion of vehicle and owner details</li>
+            <li>Real-time offense reporting and penalty management</li>
+            <li>Secure authentication and data privacy</li>
+            <li>Intuitive dashboards and search features</li>
+            <li>Responsive design for use on any device</li>
+          </ul>
+          <p>
+            Our mission is to reduce paperwork, minimize errors, and enable quick, transparent action on violations, while keeping citizen convenience at the center of every journey.
+          </p>
+<h:form>
+    <h:commandButton value="Go Home" action="#{navigationBean.adminAbout}" styleClass="back-button" />
+  </h:form>        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>

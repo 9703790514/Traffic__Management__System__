@@ -1,0 +1,143 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:ui="http://java.sun.com/jsf/facelets">
+  <jsp:output omit-xml-declaration="true" doctype-root-element="HTML"
+              doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+              doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"/>
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <html>
+      <head>
+        <title>Pending Offenses Details</title>
+        <meta charset="UTF-8" />
+        <style>
+          body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a7c 0%, #fbb034 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            color: #3a3a7c;
+          }
+          .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(58,58,124,0.15);
+            padding: 48px 40px;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+          }
+          h2 {
+            margin-top: 0;
+            margin-bottom: 32px;
+            color: #3a3a7c;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-align: center;
+          }
+          h3 {
+            color: #fbb034;
+            margin-top: 36px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+            border-bottom: 2px solid #fbb034;
+            padding-bottom: 6px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #f9f9fc;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+          table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+          }
+          table th {
+            background-color: #fbb034;
+            color: #3a3a7c;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9em;
+          }
+          table tr:last-child td {
+            border-bottom: none;
+          }
+          table tbody tr:nth-child(even) {
+            background-color: #f0f0f0;
+          }
+          table tbody tr:hover {
+            background-color: #ffe0a3;
+          }
+          .btn-back {
+            display: inline-block;
+            margin-top: 30px;
+            background: #3a3a7c;
+            color: #fbb034;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(58,58,124,0.25);
+            transition: background 0.3s ease, transform 0.15s ease;
+            text-decoration: none; /* For h:link */
+          }
+          .btn-back:hover {
+            background: #fbb034;
+            color: #3a3a7c;
+            transform: translateY(-2px) scale(1.05);
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Pending Offenses for Vehicle: <h:outputText value="#{transferVehicleBean.vehicleNumber}" /></h2>
+
+          <h:panelGroup layout="block" rendered="#{not empty transferVehicleBean.pendingOffenses}">
+            <table border="1" cellpadding="6">
+              <thead>
+                <tr>
+                  <th>Offense ID</th>
+                  <th>Type</th>
+                  <th>Date &amp; Time</th>
+                  <th>Status</th>
+                  <th>Place</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ui:repeat value="#{transferVehicleBean.pendingOffenses}" var="offense">
+                  <tr>
+                    <td><h:outputText value="#{offense.offenceDetailId}" /></td>
+                    <td><h:outputText value="#{offense.offenceDetails.offenceType}" /></td>
+                    <td>
+                      <h:outputText value="#{offense.time}">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                      </h:outputText>
+                    </td>
+                    <td><h:outputText value="#{offense.offenceStatus}" /></td>
+                    <td><h:outputText value="#{offense.place}" /></td>
+                  </tr>
+                </ui:repeat>
+              </tbody>
+            </table>
+          </h:panelGroup>
+
+          <h:form>
+            <h:commandLink value="Back to Transfer Vehicle" action="backToTransferVehicle" styleClass="btn-back" />
+          </h:form>
+        </div>
+      </body>
+    </html>
+  </f:view>
+</jsp:root>
